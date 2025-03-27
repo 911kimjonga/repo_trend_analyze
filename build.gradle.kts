@@ -44,9 +44,6 @@ dependencies {
     // Jackson Kotlin Module
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // KotlinX + Jackson
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-jackson")
-
     // tester
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
