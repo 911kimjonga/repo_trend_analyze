@@ -10,15 +10,21 @@ server:
 spring:
 
   datasource:
-    url: jdbc:h2:mem:test
+    # H2 MySQL 호환 모드
+    url: jdbc:h2:mem:testdb;MODE=MYSQL
     driver-class-name: org.h2.Driver
     username: sa
     password:
+    hikari:
+      maximum-pool-size: 10
 
   h2:
     console:
       enabled: true
+
+      # H2 콘솔 패스
       path: /h2-console
 
   autoconfigure:
+    # 기본 시큐리티 로그인 비활성화
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
