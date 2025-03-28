@@ -18,11 +18,10 @@ class UserService(
 
     @Transactional
     fun findUserByUserName(userName: String): UserResponseDto {
-        val userCount = repository.countByUserName(userName)
         val userEntity = repository.findByUserName(userName).single()
         return UserResponseDto(
             userEntity.userName,
-            userEntity.userEmail ?: "",
+            userEntity.userEmail,
         )
     }
     
