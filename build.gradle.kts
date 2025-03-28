@@ -37,6 +37,7 @@ dependencies {
 
     // web flux
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.113.Final:osx-aarch_64")
 
     // Serialization (KotlinX)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
@@ -48,8 +49,19 @@ dependencies {
     // jdbc
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
+    // jpa
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     // mybatis
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
+
+    // exposed
+    implementation("org.jetbrains.exposed:exposed-core:0.60.0")
+    implementation("org.jetbrains.exposed:exposed-dao:0.60.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.60.0")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.60.0")
+    implementation("org.jetbrains.exposed:exposed-json:0.60.0")
+    implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.60.0")
 
     // h2
     runtimeOnly("com.h2database:h2")
