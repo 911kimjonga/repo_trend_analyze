@@ -19,10 +19,47 @@ repositories {
 }
 
 dependencies {
+    // spring boot starter
     implementation("org.springframework.boot:spring-boot-starter")
+
+    // spring boot web
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    // security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
+    // web flux
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    // Serialization (KotlinX)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+
+    // Jackson Kotlin Module
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4")
+
+    // jdbc
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+
+    // mybatis
+    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
+
+    // h2
+    runtimeOnly("com.h2database:h2")
+
+    // tester
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("io.projectreactor:reactor-test")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
