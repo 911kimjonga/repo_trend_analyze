@@ -1,8 +1,8 @@
-package com.repo1.security.user.repository
+package com.repo.security.user.repository
 
-import com.repo1.security.user.entity.UserEntity
-import com.repo1.security.user.entity.Users
-import com.repo1.security.user.model.dto.UserRequestDto
+import com.repo.security.user.entity.UserEntity
+import com.repo.security.user.entity.Users
+import com.repo.security.user.model.dto.UserRequestDto
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.intLiteral

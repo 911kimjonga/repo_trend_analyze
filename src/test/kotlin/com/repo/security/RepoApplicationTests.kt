@@ -1,10 +1,10 @@
-package com.repo1.security
+package com.repo.security
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class Repo1ApplicationTests {
+class RepoApplicationTests {
 
     @Test
     fun contextLoads() {

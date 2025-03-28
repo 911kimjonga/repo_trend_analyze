@@ -1,8 +1,8 @@
-package com.repo1.security.user.service
+package com.repo.security.user.service
 
-import com.repo1.security.user.model.dto.UserRequestDto
-import com.repo1.security.user.model.dto.UserResponseDto
-import com.repo1.security.user.repository.UserRepository
+import com.repo.security.user.model.dto.UserRequestDto
+import com.repo.security.user.model.dto.UserResponseDto
+import com.repo.security.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

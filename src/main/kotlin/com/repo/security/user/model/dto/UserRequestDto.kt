@@ -1,4 +1,4 @@
-package com.repo1.security.user.model.dto
+package com.repo.security.user.model.dto
 
 data class UserRequestDto(
     val userName: String,

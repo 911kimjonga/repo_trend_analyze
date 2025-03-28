@@ -1,4 +1,4 @@
-package com.repo1.security.user.entity
+package com.repo.security.user.entity
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
