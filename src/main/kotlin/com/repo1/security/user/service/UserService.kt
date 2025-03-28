@@ -1,6 +1,6 @@
-package com.repo1.demo.user.service
+package com.repo1.security.user.service
 
-import com.repo1.demo.user.model.User
+import com.repo1.security.user.model.User
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,6 +1,6 @@
-package com.repo1.demo.user.controller
+package com.repo1.security.user.controller
 
-import com.repo1.demo.user.service.UserService
+import com.repo1.security.user.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

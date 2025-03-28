@@ -1,4 +1,4 @@
-package com.repo1.demo.user.model
+package com.repo1.security.user.model
 
 data class User(
     val id: String,

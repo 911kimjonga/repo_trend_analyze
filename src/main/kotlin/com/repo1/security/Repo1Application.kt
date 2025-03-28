@@ -1,4 +1,4 @@
-package com.repo1.demo
+package com.repo1.security
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,4 +1,4 @@
-package com.repo1.demo
+package com.repo1.security
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

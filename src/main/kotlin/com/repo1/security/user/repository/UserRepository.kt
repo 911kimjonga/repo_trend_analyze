@@ -1,4 +1,4 @@
-package com.repo1.demo.user.repository
+package com.repo1.security.user.repository
 
 import org.springframework.stereotype.Repository
 
