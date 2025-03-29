@@ -38,6 +38,11 @@ dependencies {
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+    // jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
     // web flux
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.113.Final:osx-aarch_64")
@@ -47,7 +52,6 @@ dependencies {
 
     // Jackson Kotlin Module
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4")
 
     // jdbc
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
@@ -56,7 +60,8 @@ dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // mybatis
-    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
+//    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4")
+//    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
 
     // exposed
     implementation("org.jetbrains.exposed:exposed-core:0.60.0")
