@@ -1,0 +1,22 @@
+package com.repo.security.common.utils
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+inline fun <reified T> T.logger(): Logger = LoggerFactory.getLogger(T::class.java)
+
+inline fun <reified T> T.logInfo(message: String) {
+    logger().info(message)
+}
+
+inline fun <reified T> T.logWarn(message: String) {
+    logger().warn(message)
+}
+
+inline fun <reified T> T.logError(message: String, throwable: Throwable? = null) {
+    if (throwable != null) {
+        logger().error(message, throwable)
+    } else {
+        logger().error(message)
+    }
+}
