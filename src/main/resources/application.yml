@@ -37,3 +37,8 @@ spring:
 logging:
   level:
     root: info
+
+# JWT
+jwt:
+  secret: tZghsVLHmfS8h5QOF0/nBVoR50EFE3yrEWd4aAL1/i4=
+  expiration: 3600000
