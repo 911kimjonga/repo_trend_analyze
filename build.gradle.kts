@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "com.repo1"
+group = "com.repo"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -24,6 +24,9 @@ dependencies {
 
     // spring boot web
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // logging
+    implementation("org.springframework.boot:spring-boot-starter-logging")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")

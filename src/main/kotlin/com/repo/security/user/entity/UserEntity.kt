@@ -1,4 +1,4 @@
-package com.repo1.security.user.entity
+package com.repo.security.user.entity
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
@@ -6,6 +6,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 
 class UserEntity(pk: EntityID<Long>): LongEntity(pk) {
     companion object : LongEntityClass<UserEntity>(Users)
-    var userName by Users.userName
-    var userEmail by Users.userEmail
+    var username by Users.username
+    var email by Users.email
+    var password by Users.password
 }

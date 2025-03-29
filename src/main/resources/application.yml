@@ -1,3 +1,4 @@
+# 서버
 server:
   port: 8080
   servlet:
@@ -7,8 +8,10 @@ server:
       enabled: true
       force: true
 
+# 스프링
 spring:
-
+  
+  # 데이터 소스
   datasource:
     # H2 MySQL 호환 모드
     url: jdbc:h2:mem:testdb;MODE=MYSQL
@@ -18,13 +21,19 @@ spring:
     hikari:
       maximum-pool-size: 10
 
+  # H2 데이터베이스
   h2:
     console:
       enabled: true
-
       # H2 콘솔 패스
       path: /h2-console
 
+  # 기타
   autoconfigure:
     # 기본 시큐리티 로그인 비활성화
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+# 로깅
+logging:
+  level:
+    root: info
