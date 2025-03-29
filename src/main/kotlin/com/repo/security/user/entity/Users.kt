@@ -18,7 +18,8 @@ data class User(
 )
  */
 
-object Users : LongIdTable("users", "user_id") {
-    val userName = varchar("user_name", 255)
-    val userEmail = varchar("user_email", 255).uniqueIndex()
+object Users : LongIdTable("users") {
+    val username = varchar("username", 255).uniqueIndex()
+    val password = varchar("password", 255)
+    val email = varchar("email", 255)
 }
