@@ -1,4 +1,4 @@
-package com.repo.security.common.utils
+package com.repo.security.common.log
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
