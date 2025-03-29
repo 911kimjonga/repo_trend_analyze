@@ -14,9 +14,8 @@ inline fun <reified T> T.logWarn(message: String) {
 }
 
 inline fun <reified T> T.logError(message: String, throwable: Throwable? = null) {
-    if (throwable != null) {
-        logger().error(message, throwable)
-    } else {
-        logger().error(message)
+    when (throwable) {
+        null -> logger().error(message)
+        else -> logger().error(message, throwable)
     }
 }
