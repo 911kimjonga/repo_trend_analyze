@@ -2,7 +2,7 @@ package com.repo.security.user.repository
 
 import com.repo.security.user.entity.UserEntity
 import com.repo.security.user.entity.Users
-import com.repo.security.user.model.dto.UserRequestDto
+import com.repo.security.user.model.dto.SignDto
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.intLiteral
@@ -12,24 +12,24 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserRepository {
 
-    fun saveUser(user: UserRequestDto): InsertStatement<Long> {
+    fun save(dto: SignDto): InsertStatement<Long> {
         return Users.insertIgnore {
-            it[userName] = user.userName
-            it[userEmail] = user.userEmail
+            it[username] = dto.username
+            it[password] = dto.password
+            it[email] = dto.email
         }
     }
 
-    fun findByUserName(userName: String): SizedIterable<UserEntity> {
-        return UserEntity.find {
-            Users.userName eq userName
-        }
-    }
-
-    fun countByUserName(userName: String): Long {
+    fun countByUsername(username: String): Long {
         return Users.select(intLiteral(1))
-            .where { Users.userName eq userName }
+            .where { Users.username eq username }
             .count()
     }
 
+    fun findByUsername(username: String): SizedIterable<UserEntity> {
+        return UserEntity.find {
+            Users.username eq username
+        }
+    }
 
 }
