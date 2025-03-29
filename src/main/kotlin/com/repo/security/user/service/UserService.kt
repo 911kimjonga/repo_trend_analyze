@@ -1,5 +1,6 @@
 package com.repo.security.user.service
 
+import com.repo.security.common.utils.logInfo
 import com.repo.security.user.model.dto.SignDto
 import com.repo.security.user.model.dto.UserResponseDto
 import com.repo.security.user.repository.UserRepository
@@ -17,6 +18,8 @@ class UserService(
     fun saveUser(dto: SignDto): Boolean {
 
         val encryptPassword = passwordEncoder.encode(dto.password)
+
+        logInfo("encrypt password: $encryptPassword")
 
         return repository.save(
             SignDto(
