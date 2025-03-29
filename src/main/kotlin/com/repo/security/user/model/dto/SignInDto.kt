@@ -1,7 +1,6 @@
 package com.repo.security.user.model.dto
 
-data class SignDto(
+data class SignInDto(
     val username: String,
     val password: String,
-    val email: String,
 )
