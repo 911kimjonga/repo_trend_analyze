@@ -25,6 +25,9 @@ dependencies {
     // spring boot web
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // logging
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
