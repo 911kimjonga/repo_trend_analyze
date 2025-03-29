@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class Repo1Application
+class RepoApplication
 
 fun main(args: Array<String>) {
-    runApplication<Repo1Application>(*args)
+    runApplication<RepoApplication>(*args)
 }
