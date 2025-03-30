@@ -1,7 +1,8 @@
 package com.repo.security.user.service
 
-import com.repo.security.user.model.dto.SignUpDto
-import com.repo.security.user.model.dto.SignInDto
+import com.repo.security.user.model.dto.request.SignUpRequestDto
+import com.repo.security.user.model.dto.request.SignInRequestDto
+import com.repo.security.user.model.dto.response.SignInResponseDto
 import com.repo.security.user.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -14,21 +15,22 @@ class UserService(
 ) {
 
     @Transactional
-    fun saveUser(dto: SignUpDto): Boolean {
-        val encryptPassword = passwordEncoder.encode(dto.password)
+    fun saveUser(requestDto: SignUpRequestDto): Boolean {
+        val encryptPassword = passwordEncoder.encode(requestDto.password)
         return repository.save(
-            SignUpDto(
-                dto.username,
+            SignUpRequestDto(
+                requestDto.username,
                 encryptPassword,
-                dto.email,
+                requestDto.email,
             )
         ).insertedCount > 0
     }
 
     @Transactional
-    fun isUser(dto: SignInDto): Boolean {
-        val entity = repository.findByUsername(dto.username).singleOrNull() ?: return false
-        return passwordEncoder.matches(dto.password, entity.password)
+    fun findUser(requestDto: SignInRequestDto): SignInResponseDto {
+        val responseDto = repository.findByUsername(requestDto.username)
+        passwordEncoder.matches(requestDto.password, responseDto.password)
+        return responseDto
     }
 
 }
