@@ -1,6 +1,6 @@
-package com.repo.security.user.model.vo
+package com.repo.security.user.model.vo.request
 
-data class SignUpVo(
+data class SignUpRequestVo(
     val username: String,
     val password: String,
     val email: String = "",
