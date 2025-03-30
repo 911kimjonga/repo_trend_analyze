@@ -9,4 +9,6 @@ class UserEntity(pk: EntityID<Long>): LongEntity(pk) {
     var username by Users.username
     var email by Users.email
     var password by Users.password
+    var userRole by Users.userRole
+    var status by Users.status
 }
