@@ -14,6 +14,7 @@ import com.repo.security.domain.user.model.vo.response.SignInResponseVo
 import com.repo.security.domain.user.model.vo.response.SignUpResponseVo
 import com.repo.security.domain.user.service.UserService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -69,15 +70,9 @@ class UserController(
 
     @PostMapping("/check")
     fun check(
-        @RequestHeader("Authorization") authHeader: String
+        @AuthenticationPrincipal principal: String
     ): ResponseEntity<String> {
-        val token = this.extractToken(authHeader)
-
-        jwtComponent.validateToken(token, UserRole.USER)
-
-        val id = jwtComponent.getIdByToken(token)
-
-        return ResponseEntity.ok(id)
+        return ResponseEntity.ok("user id: $principal")
     }
 
     private fun extractToken(header: String): String {

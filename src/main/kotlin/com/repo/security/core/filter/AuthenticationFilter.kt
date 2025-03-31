@@ -25,7 +25,9 @@ class AuthenticationFilter(
         try {
             val token: String = provider.extractToken(request.getHeader(JwtHeaders.AUTH.header))
 
-            provider.validateToken(token, UserRole.USER)
+            val requiredRole = resolveRequiredRole(request)
+
+            provider.validateToken(token, requiredRole)
 
             val id = provider.getIdByToken(token)
 
@@ -33,7 +35,7 @@ class AuthenticationFilter(
                 id,
                 null,
                 listOf(
-                    SimpleGrantedAuthority("ROLE_${UserRole.USER.role}")
+                    SimpleGrantedAuthority("ROLE_${requiredRole.role}")
                 )
             )
 
@@ -42,7 +44,18 @@ class AuthenticationFilter(
             filterChain.doFilter(request, response)
         } catch (e: RuntimeException) {
             SecurityContextHolder.clearContext()
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
+            throw e
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
+        }
+    }
+
+    private fun resolveRequiredRole(request: HttpServletRequest): UserRole {
+        val uri = request.requestURI
+        val method = request.method
+
+        return when {
+            uri.startsWith("/admin") -> UserRole.ADMIN
+            else -> UserRole.USER
         }
     }
 }
