@@ -9,6 +9,10 @@ inline fun <reified T> T.logInfo(message: String) {
     logger().info(message)
 }
 
+inline fun <reified T> T.logDebug(message: String) {
+    logger().debug(message)
+}
+
 inline fun <reified T> T.logWarn(message: String) {
     logger().warn(message)
 }
