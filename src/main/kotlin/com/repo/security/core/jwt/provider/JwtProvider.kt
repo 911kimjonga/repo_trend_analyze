@@ -1,5 +1,6 @@
 package com.repo.security.core.jwt.provider
 
+import com.repo.security.common.exception.SecurityException.*
 import com.repo.security.common.exception.SecurityException.JwtException.*
 import com.repo.security.core.config.JwtConfig
 import com.repo.security.core.jwt.enums.JwtHeaders.*
@@ -35,18 +36,13 @@ class JwtProvider(
         token: String,
         expectedRole: UserRole
     ): Boolean {
-        return runCatching {
-            val claims = this.getClaims(token)
+        val claims = this.getClaims(token)
+        val role = UserRole.fromRole(claims[ROLE.header] as? String)
 
-            val isExpired = claims.expiration.before(Date())
-            if (isExpired) throw ExpiredTokenException()
-
-            val roleInToken = claims[ROLE.header] as? String
-            if (roleInToken == null || roleInToken != expectedRole.role) throw InvalidRoleException()
-
-            true
-        }.getOrElse {
-            throw it
+        when {
+            claims.expiration.before(Date()) -> throw ExpiredTokenException()
+            role != expectedRole -> throw InvalidRoleException()
+            else -> return true
         }
     }
 

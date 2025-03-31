@@ -19,6 +19,11 @@ sealed class SecurityException(
         override val cause: Throwable? = null,
     ) : SecurityException(FORBIDDEN, message, cause)
 
+    class InvalidRoleException(
+        override val message: String = "Invalid roles",
+        override val cause: Throwable? = null,
+    ): JwtException(UNAUTHORIZED, message, cause)
+
     sealed class JwtException(
         override val status: HttpStatus,
         override val message: String,
@@ -32,11 +37,6 @@ sealed class SecurityException(
 
         class ExpiredTokenException(
             override val message: String = "Expired token",
-            override val cause: Throwable? = null,
-        ): JwtException(UNAUTHORIZED, message, cause)
-
-        class InvalidRoleException(
-            override val message: String = "Invalid roles",
             override val cause: Throwable? = null,
         ): JwtException(UNAUTHORIZED, message, cause)
 
