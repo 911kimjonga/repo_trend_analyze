@@ -55,7 +55,8 @@ class AuthenticationFilter(
 
         return when {
             uri.startsWith("/admin") -> UserRole.ADMIN
-            else -> UserRole.USER
+            uri.startsWith("/user") -> UserRole.USER
+            else -> UserRole.GUEST
         }
     }
 }
