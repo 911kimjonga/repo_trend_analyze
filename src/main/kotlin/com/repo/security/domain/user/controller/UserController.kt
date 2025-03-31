@@ -23,63 +23,11 @@ class UserController(
     private val userService: UserService,
     private val jwtComponent: JwtProvider,
 ) {
-
-    @PostMapping("/signup")
-    fun sign(
-        @RequestBody vo: SignUpRequestVo
-    ): ApiResponse<SignUpResponseVo> {
-        val save = userService.saveUser(
-            SignUpRequestDto(
-                vo.username,
-                vo.password,
-                vo.email
-            )
-        )
-
-        return ApiResponse.ok(
-            SignUpResponseVo(
-                isSuccess = save
-            )
-        )
-    }
-
-    @PostMapping("/signin")
-    fun login(
-        @RequestBody vo: SignInRequestVo
-    ): ApiResponse<SignInResponseVo> {
-        val user = userService.findUser(
-            SignInRequestDto(
-                vo.username,
-                vo.password
-            )
-        )
-
-        val token = jwtComponent.generateToken(
-            JwtRequestDto(
-                user.id,
-                UserRole.fromRole(user.userRole)
-            )
-        )
-
-        return ApiResponse.ok(
-            SignInResponseVo(
-                token = token,
-            )
-        )
-    }
-
     @PostMapping("/check")
     fun check(
         @AuthenticationPrincipal principal: String
     ): ResponseEntity<String> {
         return ResponseEntity.ok("user id: $principal")
-    }
-
-    private fun extractToken(header: String): String {
-        if (!header.startsWith("Bearer ")) {
-            throw UnauthorizedException()
-        }
-        return header.removePrefix("Bearer ").trim()
     }
 
     @ExceptionHandler(
