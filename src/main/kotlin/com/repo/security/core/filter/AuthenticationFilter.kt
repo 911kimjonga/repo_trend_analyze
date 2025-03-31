@@ -1,11 +1,15 @@
 package com.repo.security.core.filter
 
+import com.repo.security.common.utils.ApiResponse
 import com.repo.security.core.jwt.enums.JwtHeaders
 import com.repo.security.core.jwt.provider.JwtProvider
 import com.repo.security.domain.user.enums.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -23,6 +27,11 @@ class AuthenticationFilter(
         filterChain: FilterChain
     ) {
         try {
+            if (request.requestURI.startsWith("/auth")) {
+                filterChain.doFilter(request, response)
+                return
+            }
+
             val token: String = provider.extractToken(request.getHeader(JwtHeaders.AUTH.header))
 
             val requiredRole = resolveRequiredRole(request)
@@ -42,10 +51,17 @@ class AuthenticationFilter(
             SecurityContextHolder.getContext().authentication = auth
 
             filterChain.doFilter(request, response)
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             SecurityContextHolder.clearContext()
-            throw e
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
+
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.contentType = "application/json"
+            response.characterEncoding = "UTF-8"
+
+            val body = ApiResponse.error(HttpStatus.UNAUTHORIZED.value().toString(), e.message.orEmpty())
+
+            response.writer.write(Json.encodeToString(body))
+            response.writer.flush()
         }
     }
 
