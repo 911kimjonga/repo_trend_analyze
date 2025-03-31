@@ -7,6 +7,7 @@ enum class UserRole(
 ) {
     USER("USER"),
     ADMIN("ADMIN"),
+    GUEST("GUEST"),
     ;
 
     companion object {

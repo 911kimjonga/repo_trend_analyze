@@ -3,7 +3,7 @@ package com.repo.security.core.jwt.provider
 import com.repo.security.common.exception.SecurityException.*
 import com.repo.security.common.exception.SecurityException.JwtException.*
 import com.repo.security.core.config.JwtConfig
-import com.repo.security.core.jwt.enums.JwtHeaders.*
+import com.repo.security.core.jwt.enums.JwtClaims.*
 import com.repo.security.core.jwt.model.JwtRequestDto
 import com.repo.security.domain.user.enums.UserRole
 import io.jsonwebtoken.Jwts
@@ -25,11 +25,20 @@ class JwtProvider(
 
         return Jwts.builder()
             .subject(dto.id)
-            .claim(ROLE.header, dto.role.role)
+            .claim(ROLE.claim, dto.role.role)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(key)
             .compact()
+    }
+
+    fun extractToken(
+        header: String
+    ): String {
+        if (!header.startsWith("Bearer ")) {
+            throw UnauthorizedException()
+        }
+        return header.removePrefix("Bearer ").trim()
     }
 
     fun validateToken(
@@ -37,7 +46,7 @@ class JwtProvider(
         expectedRole: UserRole
     ): Boolean {
         val claims = this.getClaims(token)
-        val role = UserRole.fromRole(claims[ROLE.header] as? String)
+        val role = UserRole.fromRole(claims[ROLE.claim] as? String)
 
         when {
             claims.expiration.before(Date()) -> throw ExpiredTokenException()
