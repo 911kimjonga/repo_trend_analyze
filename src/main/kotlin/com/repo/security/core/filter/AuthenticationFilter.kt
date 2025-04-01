@@ -27,14 +27,18 @@ class AuthenticationFilter(
         filterChain: FilterChain
     ) {
         try {
-            if (request.requestURI.startsWith("/auth")) {
-                filterChain.doFilter(request, response)
-                return
+            val requiredRole = this.resolveRequiredRole(request)
+
+            when (requiredRole) {
+                UserRole.GUEST -> {
+                    filterChain.doFilter(request, response)
+                    return
+                }
+
+                else -> {}
             }
 
             val token: String = provider.extractToken(request.getHeader(JwtHeaders.AUTH.header))
-
-            val requiredRole = resolveRequiredRole(request)
 
             provider.validateToken(token, requiredRole)
 
