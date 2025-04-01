@@ -17,7 +17,7 @@ class JwtProvider(
 ) {
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
-    fun generateToken(
+    fun generateAccessToken(
         dto: JwtRequestDto
     ): String {
         val now = Date()
