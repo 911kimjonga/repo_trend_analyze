@@ -27,6 +27,12 @@ class UserService(
     }
 
     @Transactional
+    fun findUser(id: Long): SignInResponseDto {
+        val responseDto = repository.findById(id)
+        return responseDto
+    }
+
+    @Transactional
     fun findUser(requestDto: SignInRequestDto): SignInResponseDto {
         val responseDto = repository.findByUsername(requestDto.username)
         passwordEncoder.matches(requestDto.password, responseDto.password)

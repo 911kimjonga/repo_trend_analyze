@@ -52,7 +52,7 @@ class AuthController(
             )
         )
 
-        val token = jwtProvider.generateToken(
+        val accessToken = jwtProvider.generateAccessToken(
             JwtRequestDto(
                 user.id,
                 UserRole.fromRole(user.userRole)
@@ -61,7 +61,7 @@ class AuthController(
 
         return ApiResponse.ok(
             SignInResponseVo(
-                token = token,
+                accessToken = accessToken,
             )
         )
     }

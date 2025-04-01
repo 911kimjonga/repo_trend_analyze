@@ -25,6 +25,21 @@ class UserRepository {
         }
     }
 
+    fun findById(id: Long): SignInResponseDto {
+        val entity = UserEntity.find {
+            (Users.id eq id) and
+                    (Users.status eq UserStatus.ACTIVE.status)
+        }.singleOrNull() ?: throw IllegalArgumentException()
+
+        return SignInResponseDto(
+            entity.id.toString(),
+            entity.username,
+            entity.password,
+            entity.userRole,
+            entity.status
+        )
+    }
+
     fun countByUsername(username: String): Long {
         return Users.select(intLiteral(1))
             .where { Users.username eq username }
