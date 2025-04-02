@@ -1,6 +1,5 @@
 package com.repo.security.core.token.provider
 
-import com.repo.security.common.exception.SecurityException.RefreshTokenException.*
 import com.repo.security.core.token.model.AccessTokenRequestDto
 import com.repo.security.core.redis.service.RedisService
 import com.repo.security.domain.user.enums.UserRole
@@ -25,7 +24,7 @@ class RefreshTokenProvider(
     }
 
     fun reissueAccessToken(token: String): String {
-        val userId = redisService.get(token)
+        val userId = redisService.getUserId(token)
 
         // 토큰 유효 → Access Token 발급
         val user = userService.findUser(userId.toLong())
@@ -38,7 +37,7 @@ class RefreshTokenProvider(
     }
 
     fun rotateRefreshToken(oldToken: String): String {
-        val userId = redisService.get(oldToken)
+        val userId = redisService.getUserId(oldToken)
 
         val newToken = UUID.randomUUID().toString()
         redisService.save(newToken, userId, Duration.ofDays(7))
@@ -46,6 +45,11 @@ class RefreshTokenProvider(
         redisService.delete(oldToken)
 
         return newToken
+    }
+
+    fun deleteRefreshToken(token: String) {
+        val userId = redisService.getUserId(token)
+        redisService.delete(token)
     }
 
     internal companion object {

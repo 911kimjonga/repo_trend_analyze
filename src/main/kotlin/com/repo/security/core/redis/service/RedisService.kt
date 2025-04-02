@@ -13,11 +13,11 @@ class RedisService(
         redisTemplate.opsForValue().set("refresh:$token", userId, expiry)
     }
 
-    fun get(token: String): String {
-        return redisTemplate.opsForValue().get("refresh:$token") ?: throw InvalidRefreshTokenException()
-    }
-
     fun delete(token: String) {
         redisTemplate.delete("refresh:$token")
+    }
+
+    fun getUserId(token: String): String {
+        return redisTemplate.opsForValue().get("refresh:$token") ?: throw InvalidRefreshTokenException()
     }
 }
