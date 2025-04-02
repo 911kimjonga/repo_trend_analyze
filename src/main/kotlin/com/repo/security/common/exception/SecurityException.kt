@@ -19,26 +19,44 @@ sealed class SecurityException(
         override val cause: Throwable? = null,
     ) : SecurityException(FORBIDDEN, message, cause)
 
-    class InvalidRoleException(
-        override val message: String = "Invalid roles",
-        override val cause: Throwable? = null,
-    ): JwtException(UNAUTHORIZED, message, cause)
-
-    sealed class JwtException(
+    sealed class AccessTokenException(
         override val status: HttpStatus,
         override val message: String,
         override val cause: Throwable? = null
     ) : SecurityException(status, message, cause) {
 
-        class InvalidTokenException(
-            override val message: String = "Invalid token",
+        class InvalidAccessTokenException(
+            override val message: String = "Invalid access token",
             override val cause: Throwable? = null,
-        ): JwtException(UNAUTHORIZED, message, cause)
+        ): AccessTokenException(UNAUTHORIZED, message, cause)
 
-        class ExpiredTokenException(
-            override val message: String = "Expired token",
+        class ExpiredAccessTokenException(
+            override val message: String = "Expired access token",
             override val cause: Throwable? = null,
-        ): JwtException(UNAUTHORIZED, message, cause)
+        ): AccessTokenException(UNAUTHORIZED, message, cause)
+
+        class InvalidRoleException(
+            override val message: String = "Invalid roles",
+            override val cause: Throwable? = null,
+        ): AccessTokenException(FORBIDDEN, message, cause)
+
+    }
+
+    sealed class RefreshTokenException(
+        override val status: HttpStatus,
+        override val message: String,
+        override val cause: Throwable? = null
+    ) : SecurityException(status, message, cause) {
+
+        class InvalidRefreshTokenException(
+            override val message: String = "Invalid refresh token",
+            override val cause: Throwable? = null,
+        ): RefreshTokenException(UNAUTHORIZED, message, cause)
+
+        class ExpiredRefreshTokenException(
+            override val message: String = "Expired refresh token",
+            override val cause: Throwable? = null,
+        ): RefreshTokenException(UNAUTHORIZED, message, cause)
 
     }
 

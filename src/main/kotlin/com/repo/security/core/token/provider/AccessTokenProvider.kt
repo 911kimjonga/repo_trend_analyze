@@ -1,31 +1,32 @@
-package com.repo.security.core.jwt.provider
+package com.repo.security.core.token.provider
 
 import com.repo.security.common.exception.SecurityException.*
-import com.repo.security.common.exception.SecurityException.JwtException.*
+import com.repo.security.common.exception.SecurityException.AccessTokenException.*
 import com.repo.security.core.config.JwtConfig
-import com.repo.security.core.jwt.enums.JwtClaims.*
-import com.repo.security.core.jwt.model.JwtRequestDto
+import com.repo.security.core.token.enums.AccessTokenClaims.*
 import com.repo.security.domain.user.enums.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
+import java.time.Duration
 import java.util.*
 
 @Component
-class JwtProvider(
+class AccessTokenProvider(
     private val config: JwtConfig,
 ) {
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
-    fun generateToken(
-        dto: JwtRequestDto
+    fun generateAccessToken(
+        userId: String,
+        userRole: UserRole,
     ): String {
         val now = Date()
         val expiry = Date(now.time + config.expiration)
 
         return Jwts.builder()
-            .subject(dto.id)
-            .claim(ROLE.claim, dto.role.role)
+            .subject(userId)
+            .claim(ROLE.claim, userRole.role)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(key)
@@ -49,7 +50,7 @@ class JwtProvider(
         val role = UserRole.fromRole(claims[ROLE.claim] as? String)
 
         when {
-            claims.expiration.before(Date()) -> throw ExpiredTokenException()
+            claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
             role != expectedRole -> throw InvalidRoleException()
             else -> return true
         }
@@ -60,6 +61,11 @@ class JwtProvider(
     ): String =
         this.getClaims(token).subject
 
+    fun getRemainingTime(
+        token: String
+    ): Duration =
+        Duration.ofMillis(maxOf(0, this.getClaims(token).expiration.time - Date().time))
+
     private fun getClaims(token: String) =
         runCatching {
             Jwts.parser()
@@ -68,7 +74,7 @@ class JwtProvider(
                 .parseSignedClaims(token)
                 .payload
         }.getOrElse {
-            throw InvalidTokenException()
+            throw InvalidAccessTokenException()
         }
 
 }

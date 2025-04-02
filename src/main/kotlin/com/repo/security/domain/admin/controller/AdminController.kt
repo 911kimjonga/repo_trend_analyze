@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/admin")
 class AdminController {
-
     @PostMapping("/check")
     fun check(
         @AuthenticationPrincipal principal: String
@@ -17,5 +16,4 @@ class AdminController {
 
         return ResponseEntity.ok("user id: $principal")
     }
-
 }

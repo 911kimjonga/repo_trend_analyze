@@ -17,6 +17,12 @@ data class ApiResponse<T>(
                 data = data
             )
 
+        fun ok(message: String = "Success") =
+            ApiResponse<Unit>(
+                code = HttpStatus.OK.value().toString(),
+                message = message
+            )
+
         fun error(code: String, message: String) =
             ApiResponse<Unit>(
                 code = code,

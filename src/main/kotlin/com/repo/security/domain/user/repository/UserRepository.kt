@@ -3,8 +3,8 @@ package com.repo.security.domain.user.repository
 import com.repo.security.domain.user.entity.UserEntity
 import com.repo.security.domain.user.enums.UserRole
 import com.repo.security.domain.user.enums.UserStatus
-import com.repo.security.domain.user.model.dto.response.SignInResponseDto
-import com.repo.security.domain.user.model.dto.request.SignUpRequestDto
+import com.repo.security.domain.auth.model.dto.response.LoginResponseDto
+import com.repo.security.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.security.domain.user.table.Users
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertIgnore
@@ -25,19 +25,34 @@ class UserRepository {
         }
     }
 
+    fun findById(id: Long): LoginResponseDto {
+        val entity = UserEntity.find {
+            (Users.id eq id) and
+                    (Users.status eq UserStatus.ACTIVE.status)
+        }.singleOrNull() ?: throw IllegalArgumentException()
+
+        return LoginResponseDto(
+            entity.id.toString(),
+            entity.username,
+            entity.password,
+            entity.userRole,
+            entity.status
+        )
+    }
+
     fun countByUsername(username: String): Long {
         return Users.select(intLiteral(1))
             .where { Users.username eq username }
             .count()
     }
 
-    fun findByUsername(username: String): SignInResponseDto {
+    fun findByUsername(username: String): LoginResponseDto {
         val entity = UserEntity.find {
             (Users.username eq username) and
                     (Users.status eq UserStatus.ACTIVE.status)
         }.singleOrNull() ?: throw IllegalArgumentException()
 
-        return SignInResponseDto(
+        return LoginResponseDto(
             entity.id.toString(),
             entity.username,
             entity.password,

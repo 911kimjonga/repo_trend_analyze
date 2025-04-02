@@ -1,8 +1,8 @@
-package com.repo.security.core.jwt.model
+package com.repo.security.core.token.model
 
 import com.repo.security.domain.user.enums.UserRole
 
-data class JwtRequestDto(
+data class AccessTokenRequestDto(
     val id: String,
     val role: UserRole
 )

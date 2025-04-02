@@ -1,6 +1,6 @@
 package com.repo.security.domain.user.enums
 
-import com.repo.security.common.exception.SecurityException.InvalidRoleException
+import com.repo.security.common.exception.SecurityException.AccessTokenException.InvalidRoleException
 
 enum class UserRole(
     val role: String,
