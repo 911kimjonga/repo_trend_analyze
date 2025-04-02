@@ -1,6 +1,6 @@
-package com.repo.security.domain.user.model.dto.response
+package com.repo.security.domain.auth.model.dto.response
 
-data class SignInResponseDto(
+data class LoginResponseDto(
     val id: String,
     val username: String,
     val password: String,

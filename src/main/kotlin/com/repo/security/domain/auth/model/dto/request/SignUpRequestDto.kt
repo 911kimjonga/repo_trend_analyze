@@ -1,4 +1,4 @@
-package com.repo.security.domain.user.model.dto.request
+package com.repo.security.domain.auth.model.dto.request
 
 data class SignUpRequestDto(
     val username: String,
