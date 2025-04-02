@@ -1,15 +1,18 @@
 package com.repo.security.domain.auth.controller
 
 import com.repo.security.common.utils.ApiResponse
-import com.repo.security.core.jwt.model.JwtRequestDto
-import com.repo.security.core.jwt.provider.JwtProvider
+import com.repo.security.core.token.model.AccessTokenRequestDto
+import com.repo.security.core.token.provider.AccessTokenProvider
+import com.repo.security.core.token.provider.RefreshTokenProvider
 import com.repo.security.domain.user.enums.UserRole
-import com.repo.security.domain.user.model.dto.request.SignInRequestDto
-import com.repo.security.domain.user.model.dto.request.SignUpRequestDto
-import com.repo.security.domain.user.model.vo.request.SignInRequestVo
-import com.repo.security.domain.user.model.vo.request.SignUpRequestVo
-import com.repo.security.domain.user.model.vo.response.SignInResponseVo
-import com.repo.security.domain.user.model.vo.response.SignUpResponseVo
+import com.repo.security.domain.auth.model.dto.request.LoginRequestDto
+import com.repo.security.domain.auth.model.dto.request.SignUpRequestDto
+import com.repo.security.domain.auth.model.vo.request.LoginRequestVo
+import com.repo.security.domain.auth.model.vo.request.RefreshRequestVo
+import com.repo.security.domain.auth.model.vo.request.SignUpRequestVo
+import com.repo.security.domain.auth.model.vo.response.LoginResponseVo
+import com.repo.security.domain.auth.model.vo.response.RefreshResponseVo
+import com.repo.security.domain.auth.model.vo.response.SignUpResponseVo
 import com.repo.security.domain.user.service.UserService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
 class AuthController(
     private val userService: UserService,
-    private val jwtProvider: JwtProvider,
+    private val accessTokenProvider: AccessTokenProvider,
+    private val refreshTokenProvider: RefreshTokenProvider,
 ) {
     @PostMapping("/signup")
     fun signUp(
@@ -41,27 +45,52 @@ class AuthController(
         )
     }
 
-    @PostMapping("/signin")
-    fun signIn(
-        @RequestBody vo: SignInRequestVo
-    ): ApiResponse<SignInResponseVo> {
+    @PostMapping("/login")
+    fun login(
+        @RequestBody vo: LoginRequestVo
+    ): ApiResponse<LoginResponseVo> {
         val user = userService.findUser(
-            SignInRequestDto(
+            LoginRequestDto(
                 vo.username,
                 vo.password
             )
         )
 
-        val accessToken = jwtProvider.generateAccessToken(
-            JwtRequestDto(
+        val accessToken = accessTokenProvider.generateAccessToken(
+            AccessTokenRequestDto(
                 user.id,
                 UserRole.fromRole(user.userRole)
             )
         )
 
+        val refreshToken = refreshTokenProvider.generateRefreshToken(user.id)
+
         return ApiResponse.ok(
-            SignInResponseVo(
+            LoginResponseVo(
                 accessToken = accessToken,
+                refreshToken = refreshToken,
+            )
+        )
+    }
+
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody vo: LoginRequestVo
+    ) {
+
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody vo: RefreshRequestVo
+    ): ApiResponse<RefreshResponseVo> {
+        val newAccessToken = refreshTokenProvider.reissueAccessToken(vo.refreshToken)
+        val newRefreshToken = refreshTokenProvider.rotateRefreshToken(vo.refreshToken)
+
+        return ApiResponse.ok(
+            RefreshResponseVo(
+                accessToken = newAccessToken,
+                refreshToken = newRefreshToken,
             )
         )
     }
