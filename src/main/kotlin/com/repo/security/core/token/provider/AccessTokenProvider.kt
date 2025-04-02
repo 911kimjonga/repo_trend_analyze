@@ -1,10 +1,10 @@
-package com.repo.security.core.jwt.provider
+package com.repo.security.core.token.provider
 
 import com.repo.security.common.exception.SecurityException.*
-import com.repo.security.common.exception.SecurityException.JwtException.*
+import com.repo.security.common.exception.SecurityException.AccessTokenException.*
 import com.repo.security.core.config.JwtConfig
-import com.repo.security.core.jwt.enums.JwtClaims.*
-import com.repo.security.core.jwt.model.JwtRequestDto
+import com.repo.security.core.token.enums.AccessTokenClaims.*
+import com.repo.security.core.token.model.AccessTokenRequestDto
 import com.repo.security.domain.user.enums.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class JwtProvider(
+class AccessTokenProvider(
     private val config: JwtConfig,
 ) {
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
     fun generateAccessToken(
-        dto: JwtRequestDto
+        dto: AccessTokenRequestDto
     ): String {
         val now = Date()
         val expiry = Date(now.time + config.expiration)
@@ -49,7 +49,7 @@ class JwtProvider(
         val role = UserRole.fromRole(claims[ROLE.claim] as? String)
 
         when {
-            claims.expiration.before(Date()) -> throw ExpiredTokenException()
+            claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
             role != expectedRole -> throw InvalidRoleException()
             else -> return true
         }
@@ -68,7 +68,7 @@ class JwtProvider(
                 .parseSignedClaims(token)
                 .payload
         }.getOrElse {
-            throw InvalidTokenException()
+            throw InvalidAccessTokenException()
         }
 
 }

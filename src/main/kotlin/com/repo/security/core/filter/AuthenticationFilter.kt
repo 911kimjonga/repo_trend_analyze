@@ -1,8 +1,8 @@
 package com.repo.security.core.filter
 
 import com.repo.security.common.utils.ApiResponse
-import com.repo.security.core.jwt.enums.JwtHeaders
-import com.repo.security.core.jwt.provider.JwtProvider
+import com.repo.security.core.token.enums.AccessTokenHeaders
+import com.repo.security.core.token.provider.AccessTokenProvider
 import com.repo.security.domain.user.enums.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class AuthenticationFilter(
-    private val provider: JwtProvider
+    private val provider: AccessTokenProvider
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -38,7 +38,7 @@ class AuthenticationFilter(
                 else -> {}
             }
 
-            val token: String = provider.extractToken(request.getHeader(JwtHeaders.AUTH.header))
+            val token: String = provider.extractToken(request.getHeader(AccessTokenHeaders.AUTH.header))
 
             provider.validateToken(token, requiredRole)
 
