@@ -4,7 +4,6 @@ import com.repo.security.common.exception.SecurityException.*
 import com.repo.security.common.exception.SecurityException.AccessTokenException.*
 import com.repo.security.core.config.JwtConfig
 import com.repo.security.core.token.enums.AccessTokenClaims.*
-import com.repo.security.core.token.model.AccessTokenRequestDto
 import com.repo.security.domain.user.enums.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -18,14 +17,15 @@ class AccessTokenProvider(
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
     fun generateAccessToken(
-        dto: AccessTokenRequestDto
+        userId: String,
+        userRole: UserRole,
     ): String {
         val now = Date()
         val expiry = Date(now.time + config.expiration)
 
         return Jwts.builder()
-            .subject(dto.id)
-            .claim(ROLE.claim, dto.role.role)
+            .subject(userId)
+            .claim(ROLE.claim, userRole.role)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(key)
