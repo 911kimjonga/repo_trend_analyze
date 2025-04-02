@@ -2,7 +2,6 @@ package com.repo.security.domain.auth.controller
 
 import com.repo.security.common.utils.ApiResponse
 import com.repo.security.core.token.extensions.addCookieRefreshToken
-import com.repo.security.core.token.model.AccessTokenRequestDto
 import com.repo.security.core.token.provider.AccessTokenProvider
 import com.repo.security.core.token.provider.RefreshTokenProvider
 import com.repo.security.domain.user.enums.UserRole
@@ -15,6 +14,7 @@ import com.repo.security.domain.auth.model.vo.response.RefreshResponseVo
 import com.repo.security.domain.auth.model.vo.response.SignUpResponseVo
 import com.repo.security.domain.user.service.UserService
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -56,10 +56,8 @@ class AuthController(
         )
 
         val accessToken = accessTokenProvider.generateAccessToken(
-            AccessTokenRequestDto(
-                user.id,
-                UserRole.fromRole(user.userRole)
-            )
+            user.id,
+            UserRole.fromRole(user.userRole)
         )
 
         val refreshToken = refreshTokenProvider.generateRefreshToken(user.id)
@@ -75,6 +73,7 @@ class AuthController(
 
     @PostMapping("/logout")
     fun logout(
+        @AuthenticationPrincipal principal: String,
         @CookieValue("refreshToken") refreshToken: String
     ): ApiResponse<Unit> {
         refreshTokenProvider.deleteRefreshToken(refreshToken)

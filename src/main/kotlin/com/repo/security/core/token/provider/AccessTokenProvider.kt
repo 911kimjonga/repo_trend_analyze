@@ -8,6 +8,7 @@ import com.repo.security.domain.user.enums.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
+import java.time.Duration
 import java.util.*
 
 @Component
@@ -59,6 +60,11 @@ class AccessTokenProvider(
         token: String
     ): String =
         this.getClaims(token).subject
+
+    fun getRemainingTime(
+        token: String
+    ): Duration =
+        Duration.ofMillis(maxOf(0, this.getClaims(token).expiration.time - Date().time))
 
     private fun getClaims(token: String) =
         runCatching {
