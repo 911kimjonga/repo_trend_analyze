@@ -1,6 +1,6 @@
 package com.repo.security.core.token.provider
 
-import com.repo.security.core.token.model.AccessTokenRequestDto
+import com.repo.security.core.redis.enums.KeyType
 import com.repo.security.core.redis.service.RedisService
 import com.repo.security.domain.user.enums.UserRole
 import com.repo.security.domain.user.service.UserService
@@ -18,38 +18,36 @@ class RefreshTokenProvider(
         val refreshToken = UUID.randomUUID().toString()
         val expireSeconds = REFRESH_TOKEN_EXPIRE_SECONDS
 
-        redisService.save(refreshToken, userId, Duration.ofSeconds(expireSeconds))
+        redisService.save(KeyType.REFRESH, refreshToken, userId, Duration.ofSeconds(expireSeconds))
 
         return refreshToken
     }
 
     fun reissueAccessToken(token: String): String {
-        val userId = redisService.getUserId(token)
+        val userId = redisService.get(KeyType.REFRESH, token)
 
         // 토큰 유효 → Access Token 발급
         val user = userService.findUser(userId.toLong())
         return accessTokenProvider.generateAccessToken(
-            AccessTokenRequestDto(
-                id = user.id,
-                role = UserRole.fromRole(user.userRole)
-            )
+            user.id,
+            UserRole.fromRole(user.userRole)
         )
     }
 
     fun rotateRefreshToken(oldToken: String): String {
-        val userId = redisService.getUserId(oldToken)
+        val userId = redisService.get(KeyType.REFRESH, oldToken)
 
         val newToken = UUID.randomUUID().toString()
-        redisService.save(newToken, userId, Duration.ofDays(7))
+        redisService.save(KeyType.REFRESH, newToken, userId, Duration.ofDays(7))
 
-        redisService.delete(oldToken)
+        redisService.delete(KeyType.REFRESH, oldToken)
 
         return newToken
     }
 
     fun deleteRefreshToken(token: String) {
-        val userId = redisService.getUserId(token)
-        redisService.delete(token)
+        val userId = redisService.get(KeyType.REFRESH, token)
+        redisService.delete(KeyType.REFRESH, token)
     }
 
     internal companion object {
