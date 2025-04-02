@@ -26,12 +26,12 @@ sealed class SecurityException(
     ) : SecurityException(status, message, cause) {
 
         class InvalidAccessTokenException(
-            override val message: String = "Invalid Access token",
+            override val message: String = "Invalid access token",
             override val cause: Throwable? = null,
         ): AccessTokenException(UNAUTHORIZED, message, cause)
 
         class ExpiredAccessTokenException(
-            override val message: String = "Expired Access token",
+            override val message: String = "Expired access token",
             override val cause: Throwable? = null,
         ): AccessTokenException(UNAUTHORIZED, message, cause)
 
@@ -49,12 +49,12 @@ sealed class SecurityException(
     ) : SecurityException(status, message, cause) {
 
         class InvalidRefreshTokenException(
-            override val message: String = "Invalid Refresh token",
+            override val message: String = "Invalid refresh token",
             override val cause: Throwable? = null,
         ): RefreshTokenException(UNAUTHORIZED, message, cause)
 
         class ExpiredRefreshTokenException(
-            override val message: String = "Expired Refresh token",
+            override val message: String = "Expired refresh token",
             override val cause: Throwable? = null,
         ): RefreshTokenException(UNAUTHORIZED, message, cause)
 
