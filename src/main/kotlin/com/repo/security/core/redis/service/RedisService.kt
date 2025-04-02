@@ -1,5 +1,6 @@
 package com.repo.security.core.redis.service
 
+import com.repo.security.common.exception.SecurityException.RefreshTokenException.InvalidRefreshTokenException
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -8,15 +9,15 @@ import java.time.Duration
 class RedisService(
     private val redisTemplate: StringRedisTemplate
 ) {
-    fun save(userId: String, token: String, expiry: Duration) {
-        redisTemplate.opsForValue().set("refresh:$userId", token, expiry)
+    fun save(token: String, userId: String, expiry: Duration) {
+        redisTemplate.opsForValue().set("refresh:$token", userId, expiry)
     }
 
-    fun get(userId: String): String? {
-        return redisTemplate.opsForValue().get("refresh:$userId")
+    fun get(token: String): String {
+        return redisTemplate.opsForValue().get("refresh:$token") ?: throw InvalidRefreshTokenException()
     }
 
-    fun delete(userId: String) {
-        redisTemplate.delete("refresh:$userId")
+    fun delete(token: String) {
+        redisTemplate.delete("refresh:$token")
     }
 }
