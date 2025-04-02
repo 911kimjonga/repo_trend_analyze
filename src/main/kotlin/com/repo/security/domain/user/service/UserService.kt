@@ -1,8 +1,8 @@
 package com.repo.security.domain.user.service
 
-import com.repo.security.domain.user.model.dto.request.SignUpRequestDto
-import com.repo.security.domain.user.model.dto.request.SignInRequestDto
-import com.repo.security.domain.user.model.dto.response.SignInResponseDto
+import com.repo.security.domain.auth.model.dto.request.SignUpRequestDto
+import com.repo.security.domain.auth.model.dto.request.LoginRequestDto
+import com.repo.security.domain.auth.model.dto.response.LoginResponseDto
 import com.repo.security.domain.user.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -27,13 +27,13 @@ class UserService(
     }
 
     @Transactional
-    fun findUser(id: Long): SignInResponseDto {
+    fun findUser(id: Long): LoginResponseDto {
         val responseDto = repository.findById(id)
         return responseDto
     }
 
     @Transactional
-    fun findUser(requestDto: SignInRequestDto): SignInResponseDto {
+    fun findUser(requestDto: LoginRequestDto): LoginResponseDto {
         val responseDto = repository.findByUsername(requestDto.username)
         passwordEncoder.matches(requestDto.password, responseDto.password)
         return responseDto
