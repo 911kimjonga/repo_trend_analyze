@@ -30,7 +30,6 @@ class RefreshTokenProvider(
     ): String {
         val userId = redisService.get(KeyType.REFRESH, token)
 
-        // 토큰 유효 → Access Token 발급
         val user = userService.findUser(userId.toLong())
         return accessTokenProvider.generateAccessToken(
             user.id,
