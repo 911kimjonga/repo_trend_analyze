@@ -2,9 +2,7 @@ package com.repo.security.domain.auth.controller
 
 import com.repo.security.common.utils.ApiResponse
 import com.repo.security.core.token.extensions.addCookieRefreshToken
-import com.repo.security.core.token.provider.AccessTokenProvider
-import com.repo.security.core.token.provider.RefreshTokenProvider
-import com.repo.security.domain.user.enums.UserRole
+import com.repo.security.core.token.extensions.getRefreshToken
 import com.repo.security.domain.auth.model.dto.request.LoginRequestDto
 import com.repo.security.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.security.domain.auth.model.vo.request.LoginRequestVo
@@ -12,7 +10,8 @@ import com.repo.security.domain.auth.model.vo.request.SignUpRequestVo
 import com.repo.security.domain.auth.model.vo.response.LoginResponseVo
 import com.repo.security.domain.auth.model.vo.response.RefreshResponseVo
 import com.repo.security.domain.auth.model.vo.response.SignUpResponseVo
-import com.repo.security.domain.user.service.UserService
+import com.repo.security.domain.auth.service.AuthService
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -20,15 +19,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    private val userService: UserService,
-    private val accessTokenProvider: AccessTokenProvider,
-    private val refreshTokenProvider: RefreshTokenProvider,
+    private val authService: AuthService,
 ) {
     @PostMapping("/signup")
     fun signUp(
         @RequestBody vo: SignUpRequestVo
     ): ApiResponse<SignUpResponseVo> {
-        val save = userService.saveUser(
+        val save = authService.signUp(
             SignUpRequestDto(
                 vo.username,
                 vo.password,
@@ -43,57 +40,61 @@ class AuthController(
         )
     }
 
+    @PostMapping("withdraw")
+    fun withdraw(
+        @AuthenticationPrincipal id: String,
+        request: HttpServletRequest,
+    ): ApiResponse<Unit> {
+        authService.withdraw(id)
+        authService.logout(request)
+
+        return ApiResponse.ok()
+    }
+
     @PostMapping("/login")
     fun login(
         response: HttpServletResponse,
         @RequestBody vo: LoginRequestVo
     ): ApiResponse<LoginResponseVo> {
-        val user = userService.findUser(
+        val token = authService.login(
             LoginRequestDto(
                 vo.username,
                 vo.password
             )
         )
 
-        val accessToken = accessTokenProvider.generateAccessToken(
-            user.id,
-            UserRole.fromRole(user.userRole)
-        )
-
-        val refreshToken = refreshTokenProvider.generateRefreshToken(user.id)
-
-        response.addCookieRefreshToken(refreshToken)
+        response.addCookieRefreshToken(token.refreshToken)
 
         return ApiResponse.ok(
             LoginResponseVo(
-                accessToken = accessToken,
+                accessToken = token.accessToken,
             )
         )
     }
 
     @PostMapping("/logout")
     fun logout(
-        @AuthenticationPrincipal principal: String,
-        @CookieValue("refreshToken") refreshToken: String
+        @AuthenticationPrincipal id: String,
+        request: HttpServletRequest,
     ): ApiResponse<Unit> {
-        refreshTokenProvider.deleteRefreshToken(refreshToken)
+        authService.logout(request)
 
         return ApiResponse.ok()
     }
 
     @PostMapping("/refresh")
     fun refresh(
+        @AuthenticationPrincipal id: String,
+        request: HttpServletRequest,
         response: HttpServletResponse,
-        @CookieValue("refreshToken") refreshToken: String
     ): ApiResponse<RefreshResponseVo> {
-        val newAccessToken = refreshTokenProvider.reissueAccessToken(refreshToken)
-        val newRefreshToken = refreshTokenProvider.rotateRefreshToken(refreshToken)
+        val newToken = authService.refresh(request.getRefreshToken())
 
-        response.addCookieRefreshToken(newRefreshToken)
+        response.addCookieRefreshToken(newToken.refreshToken)
 
         return ApiResponse.ok(
             RefreshResponseVo(
-                accessToken = newAccessToken,
+                accessToken = newToken.accessToken,
             )
         )
     }

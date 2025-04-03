@@ -1,8 +1,9 @@
 package com.repo.security.core.filter
 
+import com.repo.security.common.exception.SecurityException.*
 import com.repo.security.common.utils.ApiResponse
-import com.repo.security.core.token.enums.AccessTokenHeaders
 import com.repo.security.core.token.provider.AccessTokenProvider
+import com.repo.security.domain.auth.service.AuthService
 import com.repo.security.domain.user.enums.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -18,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class AuthenticationFilter(
-    private val provider: AccessTokenProvider
+    private val accessTokenProvider: AccessTokenProvider
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -38,11 +39,11 @@ class AuthenticationFilter(
                 else -> {}
             }
 
-            val token: String = provider.extractToken(request.getHeader(AccessTokenHeaders.AUTH.header))
+            val token: String = accessTokenProvider.extractToken(request)
 
-            provider.validateToken(token, requiredRole)
+            accessTokenProvider.validateToken(token, requiredRole)
 
-            val id = provider.getIdByToken(token)
+            val id = accessTokenProvider.getIdByToken(token)
 
             val auth = UsernamePasswordAuthenticationToken(
                 id,
@@ -76,6 +77,8 @@ class AuthenticationFilter(
         return when {
             uri.startsWith("/admin") -> UserRole.ADMIN
             uri.startsWith("/user") -> UserRole.USER
+            uri.startsWith("/auth/logout") -> UserRole.USER
+            uri.startsWith("/auth/withdraw") -> UserRole.USER
             else -> UserRole.GUEST
         }
     }

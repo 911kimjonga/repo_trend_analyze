@@ -14,7 +14,9 @@ class RefreshTokenProvider(
     private val accessTokenProvider: AccessTokenProvider,
     private val userService: UserService,
 ) {
-    fun generateRefreshToken(userId: String): String {
+    fun generateRefreshToken(
+        userId: String
+    ): String {
         val refreshToken = UUID.randomUUID().toString()
         val expireSeconds = REFRESH_TOKEN_EXPIRE_SECONDS
 
@@ -23,7 +25,9 @@ class RefreshTokenProvider(
         return refreshToken
     }
 
-    fun reissueAccessToken(token: String): String {
+    fun reissueAccessToken(
+        token: String
+    ): String {
         val userId = redisService.get(KeyType.REFRESH, token)
 
         // 토큰 유효 → Access Token 발급
@@ -34,7 +38,9 @@ class RefreshTokenProvider(
         )
     }
 
-    fun rotateRefreshToken(oldToken: String): String {
+    fun rotateRefreshToken(
+        oldToken: String
+    ): String {
         val userId = redisService.get(KeyType.REFRESH, oldToken)
 
         val newToken = UUID.randomUUID().toString()
@@ -45,7 +51,9 @@ class RefreshTokenProvider(
         return newToken
     }
 
-    fun deleteRefreshToken(token: String) {
+    fun deleteRefreshToken(
+        token: String
+    ) {
         val userId = redisService.get(KeyType.REFRESH, token)
         redisService.delete(KeyType.REFRESH, token)
     }

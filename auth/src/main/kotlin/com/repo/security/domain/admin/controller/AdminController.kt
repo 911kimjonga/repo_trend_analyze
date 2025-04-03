@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController
 class AdminController {
     @PostMapping("/check")
     fun check(
-        @AuthenticationPrincipal principal: String
+        @AuthenticationPrincipal userId: String
     ): ResponseEntity<String> {
 
-        return ResponseEntity.ok("user id: $principal")
+        return ResponseEntity.ok("user id: $userId")
     }
 }
