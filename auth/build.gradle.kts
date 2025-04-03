@@ -12,11 +12,20 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 dependencies {
+    // 공통 모듈
+    implementation(project(":common"))
+
     // spring boot starter
     implementation("org.springframework.boot:spring-boot-starter")
 
@@ -80,14 +89,4 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
 }
