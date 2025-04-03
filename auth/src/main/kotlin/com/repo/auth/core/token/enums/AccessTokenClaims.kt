@@ -4,4 +4,5 @@ enum class AccessTokenClaims(
     val claim: String,
 ) {
     ROLE("role"),
+    ;
 }

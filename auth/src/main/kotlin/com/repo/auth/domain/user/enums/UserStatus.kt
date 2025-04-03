@@ -5,4 +5,5 @@ enum class UserStatus(
 ) {
     ACTIVE("A"),
     DEACTIVE("D"),
+    ;
 }

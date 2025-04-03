@@ -12,7 +12,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Component
-import java.time.Duration
+import java.time.*
 import java.util.*
 
 @Component
@@ -20,6 +20,7 @@ class AccessTokenProvider(
     private val config: JwtConfig,
     private val redisService: RedisService,
 ) {
+
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
     fun generateAccessToken(

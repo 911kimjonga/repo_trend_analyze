@@ -14,6 +14,7 @@ class RefreshTokenProvider(
     private val accessTokenProvider: AccessTokenProvider,
     private val userService: UserService,
 ) {
+
     fun generateRefreshToken(
         userId: String
     ): String {
@@ -60,4 +61,5 @@ class RefreshTokenProvider(
     internal companion object {
         const val REFRESH_TOKEN_EXPIRE_SECONDS: Long = 7 * 24 * 60 * 60
     }
+
 }

@@ -6,6 +6,7 @@ import com.repo.auth.common.exception.AuthException.RefreshTokenException.*
 import com.repo.auth.common.exception.AuthException.AccessTokenException.*
 import com.repo.auth.core.token.enums.AccessTokenHeaders
 import com.repo.auth.core.token.enums.RefreshTokenCookies
+import com.repo.auth.core.token.provider.RefreshTokenProvider.Companion.REFRESH_TOKEN_EXPIRE_SECONDS
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 
@@ -18,4 +19,4 @@ fun HttpServletRequest.getRefreshToken() =
         ?: throw InvalidRefreshTokenException()
 
 fun HttpServletResponse.addCookieRefreshToken(refreshToken: String) =
-    addCookie(RefreshTokenCookies.REFRESH_TOKEN.cookie, refreshToken, 7 * 24 * 60 * 60)
+    addCookie(RefreshTokenCookies.REFRESH_TOKEN.cookie, refreshToken, REFRESH_TOKEN_EXPIRE_SECONDS.toInt())

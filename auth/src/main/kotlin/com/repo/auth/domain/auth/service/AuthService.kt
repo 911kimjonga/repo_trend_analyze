@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service
 class AuthService(
     private val passwordEncoder: PasswordEncoder,
     private val userService: UserService,
-    private val redisService: RedisService,
     private val accessTokenProvider: AccessTokenProvider,
     private val refreshTokenProvider: RefreshTokenProvider,
 ) {

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/user")
 class UserController(
 ) {
+
     @PostMapping("/check")
     fun check(
         @AuthenticationPrincipal userId: String
     ): ResponseEntity<String> {
         return ResponseEntity.ok("user id: $userId")
     }
+
 }

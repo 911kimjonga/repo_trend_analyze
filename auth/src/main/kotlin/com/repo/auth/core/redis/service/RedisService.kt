@@ -10,19 +10,18 @@ import java.time.Duration
 class RedisService(
     private val redisTemplate: StringRedisTemplate
 ) {
-    fun save(keyType: KeyType, key: String, value: String, expiry: Duration) {
-        redisTemplate.opsForValue().set("${keyType.type}:$key", value, expiry)
-    }
 
-    fun delete(keyType: KeyType, key: String) {
-        redisTemplate.delete("${keyType.type}:$key")
-    }
+    fun save(keyType: KeyType, token: String, userId: String, expiry: Duration) =
+        redisTemplate.opsForValue().set("${keyType.type}:$token", userId, expiry)
 
-    fun get(keyType: KeyType, key: String): String {
-        return redisTemplate.opsForValue().get("${keyType.type}:$key") ?: throw InvalidRefreshTokenException()
-    }
+    fun delete(keyType: KeyType, token: String) =
+        redisTemplate.delete("${keyType.type}:$token")
 
-    fun has(keyType: KeyType, key: String): Boolean {
-        return redisTemplate.hasKey("${keyType.type}:$key")
-    }
+    fun get(keyType: KeyType, token: String): String =
+        redisTemplate.opsForValue().get("${keyType.type}:$token")
+            ?: throw InvalidRefreshTokenException()
+
+    fun has(keyType: KeyType, token: String): Boolean =
+        redisTemplate.hasKey("${keyType.type}:$token")
+
 }

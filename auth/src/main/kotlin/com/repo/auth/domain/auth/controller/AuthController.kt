@@ -7,8 +7,7 @@ import com.repo.auth.domain.auth.model.dto.request.LoginRequestDto
 import com.repo.auth.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.auth.domain.auth.model.vo.request.LoginRequestVo
 import com.repo.auth.domain.auth.model.vo.request.SignUpRequestVo
-import com.repo.auth.domain.auth.model.vo.response.LoginResponseVo
-import com.repo.auth.domain.auth.model.vo.response.RefreshResponseVo
+import com.repo.auth.domain.auth.model.vo.response.TokenResponseVo
 import com.repo.auth.domain.auth.model.vo.response.SignUpResponseVo
 import com.repo.auth.domain.auth.service.AuthService
 import jakarta.servlet.http.HttpServletRequest
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authService: AuthService,
 ) {
+
     @PostMapping("/signup")
     fun signUp(
         @RequestBody vo: SignUpRequestVo
@@ -55,7 +55,7 @@ class AuthController(
     fun login(
         response: HttpServletResponse,
         @RequestBody vo: LoginRequestVo
-    ): ApiResponse<LoginResponseVo> {
+    ): ApiResponse<TokenResponseVo> {
         val token = authService.login(
             LoginRequestDto(
                 vo.username,
@@ -66,7 +66,7 @@ class AuthController(
         response.addCookieRefreshToken(token.refreshToken)
 
         return ApiResponse.ok(
-            LoginResponseVo(
+            TokenResponseVo(
                 accessToken = token.accessToken,
             )
         )
@@ -87,15 +87,16 @@ class AuthController(
         @AuthenticationPrincipal id: String,
         request: HttpServletRequest,
         response: HttpServletResponse,
-    ): ApiResponse<RefreshResponseVo> {
+    ): ApiResponse<TokenResponseVo> {
         val newToken = authService.refresh(request.getRefreshToken())
 
         response.addCookieRefreshToken(newToken.refreshToken)
 
         return ApiResponse.ok(
-            RefreshResponseVo(
+            TokenResponseVo(
                 accessToken = newToken.accessToken,
             )
         )
     }
+
 }

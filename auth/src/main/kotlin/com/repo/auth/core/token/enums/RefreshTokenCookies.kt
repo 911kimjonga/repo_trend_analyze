@@ -4,4 +4,5 @@ enum class RefreshTokenCookies(
     val cookie: String,
 ) {
     REFRESH_TOKEN("refresh_token"),
+    ;
 }
