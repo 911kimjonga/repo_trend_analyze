@@ -1,3 +1,3 @@
 rootProject.name = "repo_security"
 
-include("common", "auth")
+include("common", "auth", "integration")

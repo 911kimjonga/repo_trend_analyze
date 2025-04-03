@@ -32,9 +32,6 @@ dependencies {
     // spring boot web
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // logging
-    implementation("org.springframework.boot:spring-boot-starter-logging")
-
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
@@ -51,15 +48,11 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
-    // web flux
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("io.netty:netty-resolver-dns-native-macos:4.1.113.Final:osx-aarch_64")
-
     // Serialization (KotlinX)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
 
     // Jackson Kotlin Module
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     // jdbc
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
