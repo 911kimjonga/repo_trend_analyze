@@ -1,5 +1,6 @@
 package com.repo.security.domain.user.repository
 
+import com.repo.security.common.exception.SecurityException.*
 import com.repo.security.domain.user.entity.UserEntity
 import com.repo.security.domain.user.enums.UserRole
 import com.repo.security.domain.user.enums.UserStatus
@@ -8,9 +9,7 @@ import com.repo.security.domain.user.model.dto.request.UpdateRequestDto
 import com.repo.security.domain.user.model.dto.response.UserResponseDto
 import com.repo.security.domain.user.table.Users
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.statements.ReturningStatement
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -36,7 +35,7 @@ class UserRepository {
         val entity = UserEntity.find {
             (Users.id eq id) and
                     (Users.status eq UserStatus.ACTIVE.status)
-        }.singleOrNull() ?: throw IllegalArgumentException()
+        }.singleOrNull() ?: throw UnauthenticatedException()
 
         return UserResponseDto(
             entity.id.toString(),
@@ -58,7 +57,7 @@ class UserRepository {
         val entity = UserEntity.find {
             (Users.username eq username) and
                     (Users.status eq UserStatus.ACTIVE.status)
-        }.singleOrNull() ?: throw IllegalArgumentException()
+        }.singleOrNull() ?: throw UnauthenticatedException()
 
         return UserResponseDto(
             entity.id.toString(),

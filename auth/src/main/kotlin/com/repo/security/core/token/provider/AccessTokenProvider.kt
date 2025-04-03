@@ -57,7 +57,7 @@ class AccessTokenProvider(
         val role = UserRole.fromRole(claims[ROLE.claim] as? String)
 
         when {
-            redisService.has(KeyType.BLACKLIST, token) -> throw UnauthenticatedException()
+            redisService.has(KeyType.BLACKLIST, token) -> throw InvalidAccessTokenException()
             claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
             role != expectedRole -> throw InvalidRoleException()
             else -> return true

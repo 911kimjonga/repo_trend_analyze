@@ -78,6 +78,7 @@ class AuthenticationFilter(
             uri.startsWith("/admin") -> UserRole.ADMIN
             uri.startsWith("/user") -> UserRole.USER
             uri.startsWith("/auth/logout") -> UserRole.USER
+            uri.startsWith("/auth/withdraw") -> UserRole.USER
             else -> UserRole.GUEST
         }
     }
