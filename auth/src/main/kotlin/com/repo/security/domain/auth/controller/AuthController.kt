@@ -40,12 +40,12 @@ class AuthController(
         )
     }
 
-    @PostMapping("signOut")
-    fun signOut(
+    @PostMapping("withdraw")
+    fun withdraw(
         @AuthenticationPrincipal id: String,
         request: HttpServletRequest,
     ): ApiResponse<Unit> {
-        authService.signOut(id)
+        authService.withdraw(id)
         authService.logout(request)
 
         return ApiResponse.ok()

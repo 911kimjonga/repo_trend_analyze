@@ -38,7 +38,7 @@ class AuthService(
             )
         )
 
-    fun signOut(
+    fun withdraw(
         userId: String,
     ) {
         userService.updateUser(
