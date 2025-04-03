@@ -40,6 +40,17 @@ class AuthController(
         )
     }
 
+    @PostMapping("signOut")
+    fun signOut(
+        @AuthenticationPrincipal id: String,
+        request: HttpServletRequest,
+    ): ApiResponse<Unit> {
+        authService.signOut(id)
+        authService.logout(request)
+
+        return ApiResponse.ok()
+    }
+
     @PostMapping("/login")
     fun login(
         response: HttpServletResponse,

@@ -10,7 +10,9 @@ import com.repo.security.domain.auth.model.dto.request.LoginRequestDto
 import com.repo.security.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.security.domain.auth.model.dto.response.TokenResponseDto
 import com.repo.security.domain.user.enums.UserRole
+import com.repo.security.domain.user.enums.UserStatus
 import com.repo.security.domain.user.model.dto.request.SaveRequestDto
+import com.repo.security.domain.user.model.dto.request.UpdateRequestDto
 import com.repo.security.domain.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -36,8 +38,15 @@ class AuthService(
             )
         )
 
-    fun signOut() {
-
+    fun signOut(
+        userId: String,
+    ) {
+        userService.updateUser(
+            UpdateRequestDto(
+                userId,
+                UserStatus.DEACTIVE
+            )
+        )
     }
 
     fun login(
