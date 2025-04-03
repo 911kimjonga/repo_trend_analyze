@@ -4,12 +4,13 @@ import com.repo.security.domain.user.entity.UserEntity
 import com.repo.security.domain.user.enums.UserRole
 import com.repo.security.domain.user.enums.UserStatus
 import com.repo.security.domain.user.model.dto.request.SaveRequestDto
+import com.repo.security.domain.user.model.dto.request.UpdateRequestDto
 import com.repo.security.domain.user.model.dto.response.UserResponseDto
 import com.repo.security.domain.user.table.Users
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insertIgnore
-import org.jetbrains.exposed.sql.intLiteral
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.statements.ReturningStatement
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -22,6 +23,12 @@ class UserRepository {
             it[email] = requestDto.email
             it[userRole] = UserRole.USER.role
             it[status] = UserStatus.ACTIVE.status
+        }
+    }
+
+    fun update(requestDto: UpdateRequestDto): Int {
+        return Users.update({ Users.id eq requestDto.userId.toLong() }) {
+            it[status] = requestDto.status.status
         }
     }
 

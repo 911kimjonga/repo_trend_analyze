@@ -1,6 +1,7 @@
 package com.repo.security.domain.user.service
 
 import com.repo.security.domain.user.model.dto.request.SaveRequestDto
+import com.repo.security.domain.user.model.dto.request.UpdateRequestDto
 import com.repo.security.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,15 +12,27 @@ class UserService(
 ) {
 
     @Transactional
-    fun saveUser(dto: SaveRequestDto) =
+    fun saveUser(
+        dto: SaveRequestDto
+    ) =
         repository.save(dto).insertedCount > 0
 
     @Transactional
-    fun findUser(id: Long) =
+    fun updateUser(
+        dto: UpdateRequestDto
+    ) =
+        repository.update(dto)
+
+    @Transactional
+    fun findUser(
+        id: Long
+    ) =
         repository.findById(id)
 
     @Transactional
-    fun findUser(userName: String) =
+    fun findUser(
+        userName: String
+    ) =
         repository.findByUsername(userName)
 
 }
