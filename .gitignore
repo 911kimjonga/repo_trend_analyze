@@ -40,4 +40,4 @@ out/
 .kotlin
 
 ### security ###
-!**/naver-client-config.yml
+**/naver-client-config.yml
