@@ -1,6 +1,7 @@
 package com.repo.integration.factory
 
 import com.repo.integration.enums.Protocols
+import com.repo.integration.filter.LoggingFilter.logRequestAndResponse
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.handler.timeout.ReadTimeoutHandler
@@ -53,6 +54,7 @@ object WebClientFactory {
                 headers.accept = listOf(MediaType.APPLICATION_JSON, MediaType.valueOf("text/json"))
                 headers.contentType = MediaType.APPLICATION_JSON
             }
+            .filter(logRequestAndResponse())
             .build()
     }
 

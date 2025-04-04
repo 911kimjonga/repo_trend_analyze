@@ -21,19 +21,8 @@ object LoggingFilter {
         }
     }
 
-    private val isReal: Boolean by lazy {
-        hostName.startsWith("OCBPRc-")
-                && !hostName.contains("stg")
-                && !hostName.contains("alp")
-                && !hostName.contains("dev")
-                && !hostName.contains("local")
-    }
-
     fun logRequestAndResponse(): ExchangeFilterFunction {
         return ExchangeFilterFunction { request, next ->
-            if (isReal) {
-                return@ExchangeFilterFunction next.exchange(request)
-            }
 
             val uuid = UUID.randomUUID().toString()
             val startTime = System.nanoTime()
