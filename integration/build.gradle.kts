@@ -30,6 +30,9 @@ dependencies {
     // common module
     implementation(project(":common"))
 
+    // spring boot starter
+    implementation("org.springframework.boot:spring-boot-starter")
+
     // spring web
     implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -50,4 +53,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+
+    // tester
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("io.projectreactor:reactor-test")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
