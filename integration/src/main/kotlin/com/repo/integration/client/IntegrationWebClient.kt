@@ -26,9 +26,9 @@ import kotlin.reflect.full.memberProperties
 
 @Component
 class IntegrationWebClient(
-    private val webClient: WebClient = WebClientFactory.getDefaultClient(),
     private val json: Json,
 ) {
+    private val webClient: WebClient = WebClientFactory.getDefaultClient()
 
     @OptIn(InternalSerializationApi::class)
     fun <T : Any> execute(
