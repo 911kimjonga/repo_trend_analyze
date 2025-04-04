@@ -40,4 +40,5 @@ out/
 .kotlin
 
 ### security ###
+**/integration-config.yml
 **/naver-client-config.yml
