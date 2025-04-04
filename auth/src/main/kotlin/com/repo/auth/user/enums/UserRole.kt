@@ -1,4 +1,4 @@
-package com.repo.auth.domain.user.enums
+package com.repo.auth.user.enums
 
 import com.repo.auth.common.exception.AuthException.AccessTokenException.InvalidRoleException
 

@@ -1,4 +1,4 @@
-package com.repo.auth.domain.user.enums
+package com.repo.auth.user.enums
 
 enum class UserStatus(
     val status: String

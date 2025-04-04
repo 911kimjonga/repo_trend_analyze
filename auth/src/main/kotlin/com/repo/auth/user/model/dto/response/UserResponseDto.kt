@@ -1,4 +1,4 @@
-package com.repo.auth.domain.user.model.dto.response
+package com.repo.auth.user.model.dto.response
 
 data class UserResponseDto(
     val id: String,

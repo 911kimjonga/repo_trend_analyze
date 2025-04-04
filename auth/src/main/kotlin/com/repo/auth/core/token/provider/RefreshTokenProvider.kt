@@ -2,8 +2,9 @@ package com.repo.auth.core.token.provider
 
 import com.repo.auth.core.redis.enums.KeyType
 import com.repo.auth.core.redis.service.RedisService
-import com.repo.auth.domain.user.enums.UserRole
-import com.repo.auth.domain.user.service.UserService
+import com.repo.auth.core.token.constants.REFRESH_TOKEN_EXPIRE_SECONDS
+import com.repo.auth.user.enums.UserRole
+import com.repo.auth.user.service.UserService
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.util.*
@@ -56,10 +57,6 @@ class RefreshTokenProvider(
     ) {
         val userId = redisService.get(KeyType.REFRESH, token)
         redisService.delete(KeyType.REFRESH, token)
-    }
-
-    internal companion object {
-        const val REFRESH_TOKEN_EXPIRE_SECONDS: Long = 7 * 24 * 60 * 60
     }
 
 }

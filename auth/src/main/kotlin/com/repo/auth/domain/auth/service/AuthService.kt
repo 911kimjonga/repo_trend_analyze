@@ -6,11 +6,11 @@ import com.repo.auth.core.token.provider.RefreshTokenProvider
 import com.repo.auth.domain.auth.model.dto.request.LoginRequestDto
 import com.repo.auth.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.auth.domain.auth.model.dto.response.TokenResponseDto
-import com.repo.auth.domain.user.enums.UserRole
-import com.repo.auth.domain.user.enums.UserStatus
-import com.repo.auth.domain.user.model.dto.request.SaveRequestDto
-import com.repo.auth.domain.user.model.dto.request.UpdateRequestDto
-import com.repo.auth.domain.user.service.UserService
+import com.repo.auth.user.enums.UserRole
+import com.repo.auth.user.enums.UserStatus
+import com.repo.auth.user.model.dto.request.SaveRequestDto
+import com.repo.auth.user.model.dto.request.UpdateRequestDto
+import com.repo.auth.user.service.UserService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

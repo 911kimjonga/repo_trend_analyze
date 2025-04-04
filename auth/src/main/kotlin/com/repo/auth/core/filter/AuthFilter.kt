@@ -2,7 +2,7 @@ package com.repo.auth.core.filter
 
 import com.repo.common.response.ApiResponse
 import com.repo.auth.core.token.provider.AccessTokenProvider
-import com.repo.auth.domain.user.enums.UserRole
+import com.repo.auth.user.enums.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

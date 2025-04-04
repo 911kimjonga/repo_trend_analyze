@@ -1,13 +1,13 @@
-package com.repo.auth.domain.user.repository
+package com.repo.auth.user.repository
 
 import com.repo.auth.common.exception.AuthException.*
-import com.repo.auth.domain.user.entity.UserEntity
-import com.repo.auth.domain.user.enums.UserRole
-import com.repo.auth.domain.user.enums.UserStatus
-import com.repo.auth.domain.user.model.dto.request.SaveRequestDto
-import com.repo.auth.domain.user.model.dto.request.UpdateRequestDto
-import com.repo.auth.domain.user.model.dto.response.UserResponseDto
-import com.repo.auth.domain.user.table.Users
+import com.repo.auth.user.entity.UserEntity
+import com.repo.auth.user.enums.UserRole
+import com.repo.auth.user.enums.UserStatus
+import com.repo.auth.user.model.dto.request.SaveRequestDto
+import com.repo.auth.user.model.dto.request.UpdateRequestDto
+import com.repo.auth.user.model.dto.response.UserResponseDto
+import com.repo.auth.user.table.Users
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.springframework.stereotype.Repository
