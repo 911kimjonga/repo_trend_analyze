@@ -1,4 +1,4 @@
-package com.repo.auth.domain.user.model.dto.request
+package com.repo.auth.user.model.dto.request
 
 data class SaveRequestDto(
     val username: String,

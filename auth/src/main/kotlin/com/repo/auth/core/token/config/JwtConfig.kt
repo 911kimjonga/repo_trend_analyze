@@ -1,4 +1,4 @@
-package com.repo.auth.core.config
+package com.repo.auth.core.token.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -8,4 +8,8 @@ import org.springframework.context.annotation.Configuration
 class JwtConfig {
     lateinit var secret: String
     var expiration: Long = 0
+}
+
+fun main() {
+
 }

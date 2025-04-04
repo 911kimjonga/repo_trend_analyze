@@ -1,6 +1,6 @@
-package com.repo.auth.domain.user.entity
+package com.repo.auth.user.entity
 
-import com.repo.auth.domain.user.table.Users
+import com.repo.auth.user.table.Users
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

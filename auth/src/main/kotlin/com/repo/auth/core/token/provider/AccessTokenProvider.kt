@@ -2,12 +2,12 @@ package com.repo.auth.core.token.provider
 
 import com.repo.auth.common.exception.AuthException.*
 import com.repo.auth.common.exception.AuthException.AccessTokenException.*
-import com.repo.auth.core.config.JwtConfig
+import com.repo.auth.core.token.config.JwtConfig
 import com.repo.auth.core.redis.enums.KeyType
 import com.repo.auth.core.redis.service.RedisService
-import com.repo.auth.core.token.enums.AccessTokenClaims.*
+import com.repo.auth.core.token.constants.ACCESS_TOKEN_CLAIM_ROLE
 import com.repo.auth.core.token.extensions.getAccessTokenHeader
-import com.repo.auth.domain.user.enums.UserRole
+import com.repo.auth.user.enums.UserRole
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
@@ -32,7 +32,7 @@ class AccessTokenProvider(
 
         return Jwts.builder()
             .subject(userId)
-            .claim(ROLE.claim, userRole.role)
+            .claim(ACCESS_TOKEN_CLAIM_ROLE, userRole.role)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(key)
@@ -55,7 +55,7 @@ class AccessTokenProvider(
         expectedRole: UserRole
     ): Boolean {
         val claims = this.getClaims(token)
-        val role = UserRole.fromRole(claims[ROLE.claim] as? String)
+        val role = UserRole.fromRole(claims[ACCESS_TOKEN_CLAIM_ROLE] as? String)
 
         when {
             redisService.has(KeyType.BLACKLIST, token) -> throw InvalidAccessTokenException()

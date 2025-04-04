@@ -1,4 +1,4 @@
-package com.repo.auth.domain.user.table
+package com.repo.auth.user.table
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 
