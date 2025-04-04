@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  config:
+    import:
+      - integration-config.yml
+      - naver-client-config.yml
+
+logging:
+  level:
+    org.springframework.boot.context.properties: DEBUG
