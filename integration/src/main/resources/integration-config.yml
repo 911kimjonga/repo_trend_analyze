@@ -1,0 +1,8 @@
+integration:
+  naver:
+    url: https://openapi.naver.com/v1/
+    datalab:
+      path: datalab/search
+      method: POST
+      contentType: application/json
+      accept: application/json

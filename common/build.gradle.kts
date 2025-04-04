@@ -35,4 +35,5 @@ dependencies {
 
     // kotlin serializable
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+    implementation("org.reflections:reflections:0.10.2")
 }

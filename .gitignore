@@ -38,3 +38,6 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### security ###
+**/naver-client-config.yml

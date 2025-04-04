@@ -1,6 +1,5 @@
 package com.repo.auth.domain.auth.service
 
-import com.repo.auth.core.redis.service.RedisService
 import com.repo.auth.core.token.extensions.getRefreshToken
 import com.repo.auth.core.token.provider.AccessTokenProvider
 import com.repo.auth.core.token.provider.RefreshTokenProvider
