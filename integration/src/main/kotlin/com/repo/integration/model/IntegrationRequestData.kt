@@ -3,7 +3,7 @@ package com.repo.integration.model
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 
-data class ClientRequestData(
+data class IntegrationRequestData(
     val url: String,
     val path: String,
     val method: HttpMethod,

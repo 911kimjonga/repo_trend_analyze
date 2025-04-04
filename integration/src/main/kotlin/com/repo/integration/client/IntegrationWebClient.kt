@@ -4,7 +4,7 @@ import com.repo.common.logs.logError
 import com.repo.common.logs.logInfo
 import com.repo.integration.exception.IntegrationException.*
 import com.repo.integration.factory.WebClientFactory
-import com.repo.integration.model.ClientRequestData
+import com.repo.integration.model.IntegrationRequestData
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.Json
@@ -25,14 +25,14 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
 @Component
-class CommonWebClient(
+class IntegrationWebClient(
     private val webClient: WebClient = WebClientFactory.getDefaultClient(),
     private val json: Json,
 ) {
 
     @OptIn(InternalSerializationApi::class)
     fun <T : Any> execute(
-        request: ClientRequestData,
+        request: IntegrationRequestData,
         responseType: KClass<T>
     ): Mono<T> {
         val url = this.setUrl(request)
@@ -69,7 +69,7 @@ class CommonWebClient(
             }
     }
 
-    private fun setUrl(request: ClientRequestData): String =
+    private fun setUrl(request: IntegrationRequestData): String =
         UriComponentsBuilder.fromHttpUrl(request.url)
             .path(request.path)
             .toUriString()
@@ -78,7 +78,7 @@ class CommonWebClient(
                     ?.let { toUriWithQueryParam(baseUrl, it) } ?: baseUrl
             }
 
-    private fun setHeaders(request: ClientRequestData) =
+    private fun setHeaders(request: IntegrationRequestData) =
         HttpHeaders().apply {
             this.contentType = request.contentType
             this.accept = listOf(request.accept)
@@ -91,7 +91,7 @@ class CommonWebClient(
             addAll(multiValueHeaders)
         }
 
-    private fun setBody(request: ClientRequestData): Any? =
+    private fun setBody(request: IntegrationRequestData): Any? =
         when {
             request.method == HttpMethod.GET -> null
             request.contentType == MediaType.APPLICATION_FORM_URLENCODED -> toFormUrlEncoded(request.body)
