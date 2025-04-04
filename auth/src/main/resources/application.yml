@@ -10,6 +10,11 @@ server:
 
 # 스프링
 spring:
+
+  # JWT 토큰 정보
+  config:
+    import:
+      - jwt-config.yml
   
   # 데이터 소스
   datasource:
@@ -49,8 +54,3 @@ spring:
 logging:
   level:
     root: info
-
-# JWT
-jwt:
-  secret: tZghsVLHmfS8h5QOF0/nBVoR50EFE3yrEWd4aAL1/i4=
-  expiration: 3600000
