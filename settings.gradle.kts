@@ -1,3 +1,3 @@
-rootProject.name = "repo_security"
+rootProject.name = "repo_trend_analyze"
 
-include("common", "auth")
+include("common", "auth", "integration")
