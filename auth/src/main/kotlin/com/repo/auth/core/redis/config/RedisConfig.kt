@@ -10,13 +10,13 @@ import org.springframework.data.redis.core.StringRedisTemplate
 class RedisConfig {
 
     @Bean
-    fun redisConnectionFactory(): RedisConnectionFactory {
+    fun authRedisConnectionFactory(): RedisConnectionFactory {
         return LettuceConnectionFactory()
     }
 
     @Bean
-    fun redisTemplate(): StringRedisTemplate {
-        return StringRedisTemplate(redisConnectionFactory())
+    fun authRedisTemplate(): StringRedisTemplate {
+        return StringRedisTemplate(authRedisConnectionFactory())
     }
 
 }

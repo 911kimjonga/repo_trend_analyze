@@ -42,3 +42,5 @@ out/
 ### security ###
 **/naver-client-config.yml
 **/jwt-config.yml
+**/datasource-config.yml
+**/redis-config.yml
