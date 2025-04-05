@@ -1,4 +1,4 @@
-package com.repo.auth.core.filter
+package com.repo.auth.core.security.filter
 
 import com.repo.common.response.ApiResponse
 import com.repo.auth.core.token.provider.AccessTokenProvider
