@@ -23,9 +23,7 @@ class AuthService(
     private val refreshTokenProvider: RefreshTokenProvider,
 ) {
 
-    fun signUp(
-        dto: SignUpRequestDto
-    ) =
+    fun signUp(dto: SignUpRequestDto) =
         userService.saveUser(
             SaveRequestDto(
                 dto.username,
@@ -34,20 +32,15 @@ class AuthService(
             )
         )
 
-    fun withdraw(
-        userId: String,
-    ) {
+    fun withdraw(userId: String) =
         userService.updateUser(
             UpdateRequestDto(
                 userId,
                 UserStatus.DEACTIVE
             )
         )
-    }
 
-    fun login(
-        dto: LoginRequestDto
-    ): TokenResponseDto {
+    fun login(dto: LoginRequestDto): TokenResponseDto {
         val user = userService.findUser(dto.username)
         passwordEncoder.matches(dto.password, user.encryptedPassword)
 
@@ -57,9 +50,7 @@ class AuthService(
         )
     }
 
-    fun logout(
-        request: HttpServletRequest,
-    ) {
+    fun logout(request: HttpServletRequest) {
         val accessToken: String = accessTokenProvider.extractToken(request)
         val refreshToken: String = request.getRefreshToken()
 
@@ -67,9 +58,7 @@ class AuthService(
         refreshTokenProvider.deleteRefreshToken(refreshToken)
     }
 
-    fun refresh(
-        refreshToken: String
-    ) =
+    fun refresh(refreshToken: String) =
         TokenResponseDto(
             refreshTokenProvider.reissueAccessToken(refreshToken),
             refreshTokenProvider.rotateRefreshToken(refreshToken)

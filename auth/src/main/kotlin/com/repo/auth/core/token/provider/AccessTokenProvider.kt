@@ -2,9 +2,9 @@ package com.repo.auth.core.token.provider
 
 import com.repo.auth.common.exception.AuthException.*
 import com.repo.auth.common.exception.AuthException.AccessTokenException.*
+import com.repo.auth.core.redis.enums.AuthRedisKeyType.BLACKLIST
 import com.repo.auth.core.token.config.JwtConfig
-import com.repo.auth.core.redis.enums.KeyType
-import com.repo.auth.core.redis.service.RedisService
+import com.repo.auth.core.redis.service.AuthRedisService
 import com.repo.auth.core.token.constants.ACCESS_TOKEN_CLAIM_ROLE
 import com.repo.auth.core.token.extensions.getAccessTokenHeader
 import com.repo.auth.user.enums.UserRole
@@ -18,7 +18,7 @@ import java.util.*
 @Component
 class AccessTokenProvider(
     private val config: JwtConfig,
-    private val redisService: RedisService,
+    private val redisService: AuthRedisService,
 ) {
 
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
@@ -58,7 +58,7 @@ class AccessTokenProvider(
         val role = UserRole.fromRole(claims[ACCESS_TOKEN_CLAIM_ROLE] as? String)
 
         when {
-            redisService.has(KeyType.BLACKLIST, token) -> throw InvalidAccessTokenException()
+            redisService.has(BLACKLIST, token) -> throw InvalidAccessTokenException()
             claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
             role != expectedRole -> throw InvalidRoleException()
             else -> return true
@@ -73,7 +73,7 @@ class AccessTokenProvider(
     fun saveBlackList(
         token: String
     ) =
-        redisService.save(KeyType.BLACKLIST, token, "logout", this.getRemainingTime(token))
+        redisService.save(BLACKLIST, token, "logout", this.getRemainingTime(token))
 
     fun getRemainingTime(
         token: String

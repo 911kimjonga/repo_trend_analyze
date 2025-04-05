@@ -1,6 +1,6 @@
-package com.repo.auth.core.config
+package com.repo.auth.core.security.config
 
-import com.repo.auth.core.filter.AuthFilter
+import com.repo.auth.core.security.filter.AuthFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

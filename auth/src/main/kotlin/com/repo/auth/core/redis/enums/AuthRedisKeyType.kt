@@ -1,6 +1,6 @@
 package com.repo.auth.core.redis.enums
 
-enum class KeyType(
+enum class AuthRedisKeyType(
     val type: String,
 ) {
     REFRESH("refresh"),

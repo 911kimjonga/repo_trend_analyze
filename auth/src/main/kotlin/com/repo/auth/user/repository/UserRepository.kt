@@ -15,21 +15,19 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserRepository {
 
-    fun save(requestDto: SaveRequestDto): InsertStatement<Long> {
-        return Users.insertIgnore {
+    fun save(requestDto: SaveRequestDto): InsertStatement<Long> =
+        Users.insertIgnore {
             it[username] = requestDto.username
             it[password] = requestDto.encryptedPassword
             it[email] = requestDto.email
             it[userRole] = UserRole.USER.role
             it[status] = UserStatus.ACTIVE.status
         }
-    }
 
-    fun update(requestDto: UpdateRequestDto): Int {
-        return Users.update({ Users.id eq requestDto.userId.toLong() }) {
+    fun update(requestDto: UpdateRequestDto): Int =
+        Users.update({ Users.id eq requestDto.userId.toLong() }) {
             it[status] = requestDto.status.status
         }
-    }
 
     fun findById(id: Long): UserResponseDto {
         val entity = UserEntity.find {
@@ -47,11 +45,10 @@ class UserRepository {
         )
     }
 
-    fun countByUsername(username: String): Long {
-        return Users.select(intLiteral(1))
+    fun countByUsername(username: String): Long =
+        Users.select(intLiteral(1))
             .where { Users.username eq username }
             .count()
-    }
 
     fun findByUsername(username: String): UserResponseDto {
         val entity = UserEntity.find {

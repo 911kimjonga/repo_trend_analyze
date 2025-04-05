@@ -9,7 +9,3 @@ class JwtConfig {
     lateinit var secret: String
     var expiration: Long = 0
 }
-
-fun main() {
-
-}
