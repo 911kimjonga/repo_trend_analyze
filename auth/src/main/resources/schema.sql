@@ -3,6 +3,6 @@ CREATE TABLE users (
    username VARCHAR(255) NOT NULL UNIQUE,
    password VARCHAR(255) NOT NULL,
    email VARCHAR(255) NOT NULL,
-   user_role VARCHAR2(16) NOT NULL,
-   status VARCHAR2(1) NOT NULL
+   user_role VARCHAR(16) NOT NULL,
+   status VARCHAR(1) NOT NULL
 );

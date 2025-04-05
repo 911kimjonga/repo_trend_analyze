@@ -28,4 +28,4 @@ spring:
 # 로깅
 logging:
   level:
-    root: debug
+    root: info
