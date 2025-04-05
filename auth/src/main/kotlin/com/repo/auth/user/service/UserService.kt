@@ -12,24 +12,16 @@ class UserService(
     private val repository: UserRepository,
 ) {
 
-    fun saveUser(
-        dto: SaveRequestDto
-    ) =
+    fun saveUser(dto: SaveRequestDto) =
         repository.save(dto).insertedCount > 0
 
-    fun updateUser(
-        dto: UpdateRequestDto
-    ) =
+    fun updateUser(dto: UpdateRequestDto) =
         repository.update(dto) > 0
 
-    fun findUser(
-        id: Long
-    ) =
+    fun findUser(id: Long) =
         repository.findById(id)
 
-    fun findUser(
-        userName: String
-    ) =
+    fun findUser(userName: String) =
         repository.findByUsername(userName)
 
 }
