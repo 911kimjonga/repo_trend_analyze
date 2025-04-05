@@ -11,39 +11,14 @@ server:
 # 스프링
 spring:
 
-  # JWT 토큰 정보
   config:
     import:
+      # DB 연결 정보
+      - datasource-config.yml
+      # JWT 토큰 정보
       - jwt-config.yml
-  
-  # 데이터 소스
-  datasource:
-    # H2 MySQL 호환 모드
-    url: jdbc:h2:mem:testdb;MODE=MYSQL
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    hikari:
-      maximum-pool-size: 10
-
-  # H2 데이터베이스
-  h2:
-    console:
-      enabled: true
-      # H2 콘솔 패스
-      path: /h2-console
-
-  # Redis
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      timeout: 3000
-      lettuce:
-        pool:
-          max-active: 10
-          max-idle: 5
-          min-idle: 1
+      # Redis 정보
+      - redis-config.yml
 
   # 기타
   autoconfigure:
@@ -53,4 +28,4 @@ spring:
 # 로깅
 logging:
   level:
-    root: info
+    root: debug
