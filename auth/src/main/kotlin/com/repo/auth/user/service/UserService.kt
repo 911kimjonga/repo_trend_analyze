@@ -20,7 +20,7 @@ class UserService(
     fun updateUser(
         dto: UpdateRequestDto
     ) =
-        repository.update(dto)
+        repository.update(dto) > 0
 
     fun findUser(
         id: Long
