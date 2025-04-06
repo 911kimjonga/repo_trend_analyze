@@ -54,8 +54,8 @@ class AuthService(
         val accessToken: String = accessTokenProvider.extractToken(request)
         val refreshToken: String = request.getRefreshToken()
 
-        accessTokenProvider.saveBlackList(accessToken)
-        refreshTokenProvider.deleteRefreshToken(refreshToken)
+        val userId = refreshTokenProvider.deleteRefreshToken(refreshToken)
+        accessTokenProvider.saveBlackList(userId, accessToken)
     }
 
     fun refresh(refreshToken: String) =

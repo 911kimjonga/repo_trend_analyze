@@ -5,18 +5,21 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
-class PasswordEncoderTest {
+@ExtendWith(MockitoExtension::class)
+class PasswordEncoderUnitTest {
 
-    @Autowired
-    lateinit var passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder = BCryptPasswordEncoder()
 
     companion object {
         private lateinit var password: String
@@ -37,6 +40,7 @@ class PasswordEncoderTest {
         logInfo("encodedPassword: $encodedPassword")
 
         assertTrue(result)
+        verify(passwordEncoder).encode(encodedPassword)
 
     }
 

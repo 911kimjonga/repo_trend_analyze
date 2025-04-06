@@ -71,14 +71,15 @@ class AccessTokenProvider(
         this.getClaims(token).subject
 
     fun saveBlackList(
+        userId: String,
         token: String
     ) =
-        redisService.save(BLACKLIST, token, "logout", this.getRemainingTime(token))
+        redisService.save(BLACKLIST, token, userId, this.getRemainingTime(token))
 
     fun getRemainingTime(
         token: String
-    ): Duration =
-        Duration.ofMillis(maxOf(0, this.getClaims(token).expiration.time - Date().time))
+    ) =
+        maxOf(0, this.getClaims(token).expiration.time - Date().time)
 
     private fun getClaims(
         token: String
