@@ -1,7 +1,7 @@
 package com.repo.auth.core.security.filter
 
 import com.repo.common.response.ApiResponse
-import com.repo.auth.core.token.provider.AccessTokenProvider
+import com.repo.auth.core.token.service.TokenService
 import com.repo.auth.user.enums.UserRole
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class AuthFilter(
-    private val accessTokenProvider: AccessTokenProvider
+    private val tokenService: TokenService
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -37,11 +37,11 @@ class AuthFilter(
                 else -> {}
             }
 
-            val token: String = accessTokenProvider.extractToken(request)
+            val token: String = tokenService.getAccessToken(request)
 
-            accessTokenProvider.validateToken(token, requiredRole)
+            tokenService.validateAccessToken(token, requiredRole)
 
-            val id = accessTokenProvider.getIdByToken(token)
+            val id = tokenService.getUserIdByAccessToken(token)
 
             val auth = UsernamePasswordAuthenticationToken(
                 id,
@@ -80,5 +80,5 @@ class AuthFilter(
             else -> UserRole.GUEST
         }
     }
-    
+
 }

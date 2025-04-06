@@ -12,11 +12,11 @@ import jakarta.servlet.http.HttpServletResponse
 
 fun HttpServletRequest.getAccessTokenHeader() =
     getHeader(ACCESS_TOKEN_HEADER_AUTH)
-        ?: throw InvalidAccessTokenException()
+        ?: throw InvalidAccessTokenException("Invalid access token. Not Found Authorization Header")
 
 fun HttpServletRequest.getRefreshToken() =
     getCookie(REFRESH_TOKEN_COOKIE)
-        ?: throw InvalidRefreshTokenException()
+        ?: throw InvalidRefreshTokenException("Invalid refresh token. Not Found Refresh Token Cookie")
 
 fun HttpServletResponse.addCookieRefreshToken(refreshToken: String) =
     addCookie(REFRESH_TOKEN_COOKIE, refreshToken, REFRESH_TOKEN_TTL.toInt())

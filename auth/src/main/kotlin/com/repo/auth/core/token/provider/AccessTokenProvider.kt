@@ -6,13 +6,14 @@ import com.repo.auth.core.redis.enums.AuthRedisKeyType.BLACKLIST
 import com.repo.auth.core.token.config.JwtConfig
 import com.repo.auth.core.redis.service.AuthRedisService
 import com.repo.auth.core.token.constants.ACCESS_TOKEN_CLAIM_ROLE
-import com.repo.auth.core.token.extensions.getAccessTokenHeader
 import com.repo.auth.user.enums.UserRole
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
-import jakarta.servlet.http.HttpServletRequest
+import io.jsonwebtoken.security.SignatureException
 import org.springframework.stereotype.Component
-import java.time.*
 import java.util.*
 
 @Component
@@ -23,7 +24,7 @@ class AccessTokenProvider(
 
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
-    fun generateAccessToken(
+    fun generate(
         userId: String,
         userRole: UserRole,
     ): String {
@@ -39,18 +40,15 @@ class AccessTokenProvider(
             .compact()
     }
 
-    fun extractToken(
-        request: HttpServletRequest
-    ): String {
-        val header = request.getAccessTokenHeader()
+    fun parseBearerToken(
+        header: String
+    ) =
+        header.takeIf { it.startsWith("Bearer ") }
+            ?.removePrefix("Bearer ")
+            ?.trim()
+            ?: throw UnauthorizedException("Missing or malformed Authorization header")
 
-        if (!header.startsWith("Bearer ")) {
-            throw UnauthorizedException()
-        }
-        return header.removePrefix("Bearer ").trim()
-    }
-
-    fun validateToken(
+    fun validate(
         token: String,
         expectedRole: UserRole
     ): Boolean {
@@ -58,25 +56,24 @@ class AccessTokenProvider(
         val role = UserRole.fromRole(claims[ACCESS_TOKEN_CLAIM_ROLE] as? String)
 
         when {
-            redisService.has(BLACKLIST, token) -> throw InvalidAccessTokenException()
-            claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
-            role != expectedRole -> throw InvalidRoleException()
+            redisService.has(BLACKLIST, token) -> throw InvalidAccessTokenException("Invalid access token. Access token is blacklisted")
+            role != expectedRole -> throw InvalidRoleException("Invalid roles. ExpectedRole is $expectedRole")
             else -> return true
         }
     }
 
-    fun getIdByToken(
+    fun getUserId(
         token: String
     ): String =
         this.getClaims(token).subject
 
-    fun saveBlackList(
+    fun addToBlackList(
         userId: String,
         token: String
     ) =
         redisService.save(BLACKLIST, token, userId, this.getRemainingTime(token))
 
-    fun getRemainingTime(
+    private fun getRemainingTime(
         token: String
     ) =
         maxOf(0, this.getClaims(token).expiration.time - Date().time)
@@ -91,7 +88,14 @@ class AccessTokenProvider(
                 .parseSignedClaims(token)
                 .payload
         }.getOrElse {
-            throw InvalidAccessTokenException()
+            when (it) {
+                is ExpiredJwtException -> throw ExpiredAccessTokenException()
+                is UnsupportedJwtException -> throw InvalidAccessTokenException("Unsupported JWT format.")
+                is MalformedJwtException -> throw InvalidAccessTokenException("Malformed JWT.")
+                is SignatureException -> throw InvalidAccessTokenException("JWT signature does not match.")
+                is IllegalArgumentException -> throw InvalidAccessTokenException("JWT is null or empty.")
+                else -> throw InvalidAccessTokenException("Invalid access token. Failed getting claims")
+            }
         }
 
 }

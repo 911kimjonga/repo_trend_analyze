@@ -3,16 +3,15 @@ package com.repo.auth.user.repository
 import com.repo.auth.user.enums.UserStatus
 import com.repo.auth.user.model.dto.request.SaveRequestDto
 import com.repo.auth.user.model.dto.request.UpdateRequestDto
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertEquals
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
