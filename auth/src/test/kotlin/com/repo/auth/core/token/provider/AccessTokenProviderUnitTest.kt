@@ -1,10 +1,9 @@
-package com.repo.auth.core.token
+package com.repo.auth.core.token.provider
 
 import com.repo.auth.common.exception.AuthException
 import com.repo.auth.core.redis.enums.AuthRedisKeyType.BLACKLIST
 import com.repo.auth.core.redis.service.AuthRedisService
 import com.repo.auth.core.token.config.JwtConfig
-import com.repo.auth.core.token.provider.AccessTokenProvider
 import com.repo.auth.user.enums.UserRole
 import com.repo.common.logs.logInfo
 import org.junit.jupiter.api.Assertions.*
