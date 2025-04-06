@@ -2,6 +2,7 @@ package com.repo.auth.core.redis
 
 import com.repo.auth.core.redis.enums.AuthRedisKeyType
 import com.repo.auth.core.redis.service.AuthRedisService
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,19 +17,30 @@ import kotlin.test.assertTrue
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
-class RedisServiceTest {
+class AuthRedisServiceTest {
 
     @Autowired
     lateinit var redisService: AuthRedisService
 
+    companion object {
+        private lateinit var keyType: AuthRedisKeyType
+        private lateinit var token: String
+        private lateinit var userId: String
+        private var ttl: Long = 0
+    }
+
+    @BeforeEach
+    fun setup() {
+        keyType = AuthRedisKeyType.REFRESH
+        token = "test-token-123"
+        userId = "user123"
+        ttl = Duration.ofMinutes(5).toSeconds()
+    }
+
     @Test
     fun test() {
-        val keyType = AuthRedisKeyType.REFRESH
-        val token = "test-token-123"
-        val userId = "user123"
-        val expiry = Duration.ofMinutes(5)
 
-        redisService.save(keyType, token, userId, expiry)
+        redisService.save(keyType, token, userId, ttl)
 
         val has = redisService.has(keyType, token)
         val get = redisService.get(keyType, token)
@@ -41,9 +53,8 @@ class RedisServiceTest {
         val hasNot = redisService.has(keyType, token)
 
         assertFalse(hasNot)
-        assertFails {
-            redisService.get(keyType, token)
-        }
+        assertFails { redisService.get(keyType, token) }
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.repo.auth.user.service
 import com.repo.auth.user.enums.UserStatus
 import com.repo.auth.user.model.dto.request.SaveRequestDto
 import com.repo.auth.user.model.dto.request.UpdateRequestDto
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,47 +24,75 @@ class UserServiceTest {
     @Autowired
     lateinit var userService: UserService
 
+    companion object {
+        private lateinit var saveUsername: String
+        private lateinit var savePassword: String
+        private lateinit var saveEmail: String
+
+        private lateinit var updateStatus: UserStatus
+
+        private var initUserId: Long = 1L
+        private lateinit var initUsername: String
+    }
+
+    @BeforeEach
+    fun setUp() {
+        initUserId = 1
+        initUsername = "alice123"
+
+        saveUsername = "tester"
+        savePassword = passwordEncoder.encode("1234")
+        saveEmail = "test@tester.com"
+
+        updateStatus = UserStatus.DEACTIVE
+    }
+
     @Test
     fun saveUser() {
 
-        val dto = SaveRequestDto("tester", passwordEncoder.encode("1234"), "tester@tester.com")
+        val username = saveUsername
+        val password = savePassword
+        val email = saveEmail
+        val dto = SaveRequestDto(username, password, email)
 
-        val save = userService.saveUser(dto)
+        val result = userService.saveUser(dto)
 
-        assertTrue(save)
+        assertTrue(result)
 
     }
 
     @Test
     fun updateUser() {
 
-        val dto = UpdateRequestDto("1", UserStatus.DEACTIVE)
+        val id = initUserId.toString()
+        val status = updateStatus
+        val dto = UpdateRequestDto(id, status)
 
-        val update = userService.updateUser(dto)
+        val result = userService.updateUser(dto)
 
-        assertTrue(update)
+        assertTrue(result)
 
     }
 
     @Test
     fun findUserById() {
 
-        val id = 1L
+        val id = initUserId
 
-        val user = userService.findUser(id)
+        val result = userService.findUser(id)
 
-        assertEquals(id.toString(), user.id)
+        assertEquals(id.toString(), result.id)
 
     }
 
     @Test
     fun findUserByUsername() {
 
-        val username = "alice123"
+        val username = initUsername
 
-        val user = userService.findUser(username)
+        val result = userService.findUser(username)
 
-        assertEquals(username, user.username)
+        assertEquals(username, result.username)
 
     }
 
