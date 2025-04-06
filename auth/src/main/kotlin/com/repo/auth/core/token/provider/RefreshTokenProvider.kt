@@ -3,7 +3,6 @@ package com.repo.auth.core.token.provider
 import com.repo.auth.core.redis.enums.AuthRedisKeyType.REFRESH
 import com.repo.auth.core.redis.service.AuthRedisService
 import com.repo.auth.core.token.constants.REFRESH_TOKEN_TTL
-import com.repo.auth.user.enums.UserRole
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -46,8 +45,8 @@ class RefreshTokenProvider(
     }
 
     fun getUserId(
-        refreshToken: String
+        token: String
     ): String =
-        redisService.get(REFRESH, refreshToken)
+        redisService.get(REFRESH, token)
 
 }

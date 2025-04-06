@@ -1,7 +1,6 @@
 package com.repo.auth.core.security.filter
 
 import com.repo.common.response.ApiResponse
-import com.repo.auth.core.token.provider.AccessTokenProvider
 import com.repo.auth.core.token.service.TokenService
 import com.repo.auth.user.enums.UserRole
 import jakarta.servlet.FilterChain
@@ -81,5 +80,5 @@ class AuthFilter(
             else -> UserRole.GUEST
         }
     }
-    
+
 }
