@@ -23,7 +23,7 @@ class AccessTokenProvider(
 
     private val key by lazy { Keys.hmacShaKeyFor(config.secret.toByteArray()) }
 
-    fun generateAccessToken(
+    fun generate(
         userId: String,
         userRole: UserRole,
     ): String {
@@ -39,18 +39,15 @@ class AccessTokenProvider(
             .compact()
     }
 
-    fun extractToken(
-        request: HttpServletRequest
-    ): String {
-        val header = request.getAccessTokenHeader()
+    fun parseBearerToken(
+        header: String
+    ) =
+        header.takeIf { it.startsWith("Bearer ") }
+            ?.removePrefix("Bearer ")
+            ?.trim()
+            ?: throw UnauthorizedException("Missing or malformed Authorization header")
 
-        if (!header.startsWith("Bearer ")) {
-            throw UnauthorizedException()
-        }
-        return header.removePrefix("Bearer ").trim()
-    }
-
-    fun validateToken(
+    fun validate(
         token: String,
         expectedRole: UserRole
     ): Boolean {
@@ -58,25 +55,25 @@ class AccessTokenProvider(
         val role = UserRole.fromRole(claims[ACCESS_TOKEN_CLAIM_ROLE] as? String)
 
         when {
-            redisService.has(BLACKLIST, token) -> throw InvalidAccessTokenException()
+            redisService.has(BLACKLIST, token) -> throw InvalidAccessTokenException("Invalid access token. Access token is blacklisted")
             claims.expiration.before(Date()) -> throw ExpiredAccessTokenException()
-            role != expectedRole -> throw InvalidRoleException()
+            role != expectedRole -> throw InvalidRoleException("Invalid roles. ExpectedRole is $expectedRole")
             else -> return true
         }
     }
 
-    fun getIdByToken(
+    fun getUserId(
         token: String
     ): String =
         this.getClaims(token).subject
 
-    fun saveBlackList(
+    fun addToBlackList(
         userId: String,
         token: String
     ) =
         redisService.save(BLACKLIST, token, userId, this.getRemainingTime(token))
 
-    fun getRemainingTime(
+    private fun getRemainingTime(
         token: String
     ) =
         maxOf(0, this.getClaims(token).expiration.time - Date().time)
@@ -91,7 +88,7 @@ class AccessTokenProvider(
                 .parseSignedClaims(token)
                 .payload
         }.getOrElse {
-            throw InvalidAccessTokenException()
+            throw InvalidAccessTokenException("Invalid access token. Failed getting claims")
         }
 
 }

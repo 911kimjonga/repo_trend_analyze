@@ -3,6 +3,7 @@ package com.repo.auth.domain.auth.service
 import com.repo.auth.core.token.extensions.getRefreshToken
 import com.repo.auth.core.token.provider.AccessTokenProvider
 import com.repo.auth.core.token.provider.RefreshTokenProvider
+import com.repo.auth.core.token.service.TokenService
 import com.repo.auth.domain.auth.model.dto.request.LoginRequestDto
 import com.repo.auth.domain.auth.model.dto.request.SignUpRequestDto
 import com.repo.auth.domain.auth.model.dto.response.TokenResponseDto
@@ -19,8 +20,7 @@ import org.springframework.stereotype.Service
 class AuthService(
     private val passwordEncoder: PasswordEncoder,
     private val userService: UserService,
-    private val accessTokenProvider: AccessTokenProvider,
-    private val refreshTokenProvider: RefreshTokenProvider,
+    private val tokenService: TokenService,
 ) {
 
     fun signUp(dto: SignUpRequestDto) =
@@ -45,23 +45,23 @@ class AuthService(
         passwordEncoder.matches(dto.password, user.encryptedPassword)
 
         return TokenResponseDto(
-            accessTokenProvider.generateAccessToken(user.id, UserRole.fromRole(user.userRole)),
-            refreshTokenProvider.generateRefreshToken(user.id)
+            tokenService.generateAccessToken(user.id, UserRole.fromRole(user.userRole)),
+            tokenService.generateRefreshToken(user.id)
         )
     }
 
     fun logout(request: HttpServletRequest) {
-        val accessToken: String = accessTokenProvider.extractToken(request)
-        val refreshToken: String = request.getRefreshToken()
+        val accessToken: String = tokenService.getAccessToken(request)
+        val refreshToken: String = tokenService.getRefreshToken(request)
 
-        val userId = refreshTokenProvider.deleteRefreshToken(refreshToken)
-        accessTokenProvider.saveBlackList(userId, accessToken)
+        val userId = tokenService.deleteRefreshToken(refreshToken)
+        tokenService.addAccessTokenToBlacklist(userId, accessToken)
     }
 
     fun refresh(refreshToken: String) =
         TokenResponseDto(
-            refreshTokenProvider.reissueAccessToken(refreshToken),
-            refreshTokenProvider.rotateRefreshToken(refreshToken)
+            tokenService.reissueAccessToken(refreshToken),
+            tokenService.rotateRefreshToken(refreshToken)
         )
 
 }

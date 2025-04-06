@@ -4,19 +4,15 @@ import com.repo.auth.core.redis.enums.AuthRedisKeyType.REFRESH
 import com.repo.auth.core.redis.service.AuthRedisService
 import com.repo.auth.core.token.constants.REFRESH_TOKEN_TTL
 import com.repo.auth.user.enums.UserRole
-import com.repo.auth.user.service.UserService
 import org.springframework.stereotype.Component
-import java.time.Duration
 import java.util.*
 
 @Component
 class RefreshTokenProvider(
     private val redisService: AuthRedisService,
-    private val accessTokenProvider: AccessTokenProvider,
-    private val userService: UserService,
 ) {
 
-    fun generateRefreshToken(
+    fun generate(
         userId: String
     ): String {
         val refreshToken = UUID.randomUUID().toString()
@@ -27,39 +23,31 @@ class RefreshTokenProvider(
         return refreshToken
     }
 
-    fun reissueAccessToken(
+    fun delete(
         token: String
     ): String {
-        val userId = redisService.get(REFRESH, token)
+        val userId = this.getUserId(token)
 
-        val user = userService.findUser(userId.toLong())
+        redisService.delete(REFRESH, token)
 
-        return accessTokenProvider.generateAccessToken(
-            user.id,
-            UserRole.fromRole(user.userRole)
-        )
+        return userId
     }
 
-    fun rotateRefreshToken(
+    fun rotate(
         oldToken: String
     ): String {
-        val userId = redisService.get(REFRESH, oldToken)
+        val userId = this.getUserId(oldToken)
 
-        val newToken = this.generateRefreshToken(userId)
+        val newToken = this.generate(userId)
 
         redisService.delete(REFRESH, oldToken)
 
         return newToken
     }
 
-    fun deleteRefreshToken(
-        token: String
-    ): String {
-        val userId = redisService.get(REFRESH, token)
-
-        redisService.delete(REFRESH, token)
-
-        return userId
-    }
+    fun getUserId(
+        refreshToken: String
+    ): String =
+        redisService.get(REFRESH, refreshToken)
 
 }
