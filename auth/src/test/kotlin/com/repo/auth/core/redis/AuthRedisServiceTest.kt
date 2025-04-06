@@ -1,18 +1,17 @@
 package com.repo.auth.core.redis
 
+import com.repo.auth.common.exception.AuthException
 import com.repo.auth.core.redis.enums.AuthRedisKeyType
 import com.repo.auth.core.redis.service.AuthRedisService
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -53,7 +52,9 @@ class AuthRedisServiceTest {
         val hasNot = redisService.has(keyType, token)
 
         assertFalse(hasNot)
-        assertFails { redisService.get(keyType, token) }
+        assertThrows<AuthException.RefreshTokenException.InvalidRefreshTokenException> {
+            redisService.get(keyType, token)
+        }
 
     }
 

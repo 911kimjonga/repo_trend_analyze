@@ -2,6 +2,7 @@ package com.repo.auth.core.redis
 
 import com.repo.auth.core.redis.enums.AuthRedisKeyType
 import com.repo.auth.core.redis.service.AuthRedisService
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -15,9 +16,6 @@ import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import java.time.Duration
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @ExtendWith(MockitoExtension::class)
 class AuthRedisServiceUnitTest {
