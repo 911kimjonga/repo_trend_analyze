@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.awaitBody
 import org.springframework.web.util.UriComponentsBuilder
 import reactor.core.publisher.Mono
@@ -41,27 +42,22 @@ class IntegrationCoroutineWebClient(
         val headers = this.setHeaders(request)
         val requestBody = this.setBody(request)
 
-        return try {
+        try {
             val response = webClient.method(method)
                 .uri(url)
                 .headers { it.setAll(headers.toSingleValueMap()) }
                 .apply { requestBody?.let { this.bodyValue(it) } }
                 .retrieve()
-                .onStatus({ it.isError }) {
-                    it.bodyToMono(String::class.java)
-                        .map { _ ->
-                            when {
-                                it.statusCode().is4xxClientError -> IntegrationClientException()
-                                it.statusCode().is5xxServerError -> IntegrationServerException()
-                                else -> IntegrationUnexpectedException()
-                            }
-                        }
-                }
                 .awaitBody<String>()
 
-            json.decodeFromString(responseType.serializer(), response)
+            return json.decodeFromString(responseType.serializer(), response)
         } catch (ex: Exception) {
-           throw when (ex) {
+            throw when (ex) {
+                is WebClientResponseException -> when {
+                    ex.statusCode.is4xxClientError -> IntegrationClientException()
+                    ex.statusCode.is5xxServerError -> IntegrationServerException()
+                    else -> IntegrationUnexpectedException()
+                }
                 is SocketTimeoutException -> IntegrationTimeoutException("Timeout", ex)
                 is ConnectException -> IntegrationConnectionException("Connection error", ex)
                 else -> IntegrationUnexpectedException("Unexpected error", ex)
