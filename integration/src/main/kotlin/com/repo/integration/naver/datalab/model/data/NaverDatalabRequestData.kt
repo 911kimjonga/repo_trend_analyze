@@ -1,4 +1,4 @@
-package com.repo.integration.naver.datalab.model
+package com.repo.integration.naver.datalab.model.data
 
 import com.repo.integration.naver.datalab.enums.Device
 import com.repo.integration.naver.datalab.enums.Gender
