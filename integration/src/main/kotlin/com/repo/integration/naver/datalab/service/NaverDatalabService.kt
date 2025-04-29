@@ -5,12 +5,33 @@ import com.repo.integration.naver.datalab.enums.TimeUnit
 import com.repo.integration.naver.datalab.model.data.NaverDatalabRequestData
 import com.repo.integration.naver.datalab.model.dto.NaverDatalabResponseDto
 import com.repo.integration.naver.datalab.model.extensions.toDto
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
 class NaverDatalabService(
-    private val client: NaverDatalabClient
+    private val client: NaverDatalabClient,
+    private val json: Json
 ) {
+
+    suspend fun test(): String {
+        return coroutineScope {
+            val search1Deferred = async { search1() }
+            val search2Deferred = async { search2() }
+
+            val search1Result = search1Deferred.await()
+            val search2Result = search2Deferred.await()
+
+            val result1 = json.encodeToString(search1Result)
+            val result2 = json.encodeToString(search2Result)
+
+            result1 + "\n" + result2
+        }
+    }
 
     suspend fun search1(): NaverDatalabResponseDto {
 

@@ -2,6 +2,7 @@ package com.repo.common.response
 
 import kotlinx.serialization.Serializable
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 @Serializable
 data class ApiResponse<T>(
@@ -22,6 +23,13 @@ data class ApiResponse<T>(
                 code = HttpStatus.OK.value().toString(),
                 message = message
             )
+
+        fun auth(message: String = "Auth") =
+            ApiResponse<Unit>(
+                code = HttpStatus.UNAUTHORIZED.value().toString(),
+                message = message
+            )
+
 
         fun error(code: String, message: String) =
             ApiResponse<Unit>(

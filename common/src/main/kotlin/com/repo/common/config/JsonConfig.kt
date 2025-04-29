@@ -1,8 +1,8 @@
 package com.repo.common.config
 
-import com.skp.ocb.kotlin.serialize.serializer.LocalDateSerializer
-import com.skp.ocb.kotlin.serialize.serializer.LocalDateTimeSerializer
-import com.skp.ocb.kotlin.serialize.serializer.LocalTimeSerializer
+import com.repo.common.serializer.LocalDateSerializer
+import com.repo.common.serializer.LocalDateTimeSerializer
+import com.repo.common.serializer.LocalTimeSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
