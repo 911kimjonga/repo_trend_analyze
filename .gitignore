@@ -39,6 +39,9 @@ out/
 ### Kotlin ###
 .kotlin
 
+### env ###
+*.env
+
 ### security ###
 **/naver-client-config.yml
 **/jwt-config.yml

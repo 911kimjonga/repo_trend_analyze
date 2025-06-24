@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   servlet:
     context-path: /
     encoding:
@@ -9,6 +9,9 @@ server:
 
 spring:
   config:
+    activate:
+      on-profile: integration
+
     import:
       - integration-config.yml
       - naver-client-config.yml
