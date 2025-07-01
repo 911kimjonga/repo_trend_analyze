@@ -1,0 +1,11 @@
+spring:
+  data:
+    redis:
+      host: ${AUTH_REDIS_HOST}
+      port: ${AUTH_REDIS_PORT}
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
