@@ -12,17 +12,44 @@ class AuthRedisService(
     @Qualifier("authRedisTemplate") private val redisTemplate: StringRedisTemplate
 ) {
 
-    fun save(keyType: AuthRedisKeyType, token: String, userId: String, ttl: Long) =
-        redisTemplate.opsForValue().set("${keyType.type}:$token", userId, ttl, TimeUnit.SECONDS)
+    fun save(
+        keyType: AuthRedisKeyType,
+        token: String,
+        userId: String,
+        ttl: Long
+    ) {
+        redisTemplate.opsForValue().set(
+            "${keyType.type}:$token",
+            userId,
+            ttl,
+            TimeUnit.SECONDS
+        )
+    }
 
-    fun delete(keyType: AuthRedisKeyType, token: String) =
-        redisTemplate.delete("${keyType.type}:$token")
+    fun delete(
+        keyType: AuthRedisKeyType,
+        token: String
+    ) {
+        redisTemplate.delete(
+            "${keyType.type}:$token"
+        )
+    }
 
-    fun get(keyType: AuthRedisKeyType, token: String): String =
-        redisTemplate.opsForValue().get("${keyType.type}:$token")
+    fun get(
+        keyType: AuthRedisKeyType,
+        token: String
+    ): String {
+        return redisTemplate.opsForValue().get("${keyType.type}:$token")
             ?: throw InvalidRefreshTokenException()
+    }
 
-    fun has(keyType: AuthRedisKeyType, token: String): Boolean =
-        redisTemplate.hasKey("${keyType.type}:$token")
+    fun has(
+        keyType: AuthRedisKeyType,
+        token: String
+    ): Boolean {
+        return redisTemplate.hasKey(
+            "${keyType.type}:$token"
+        )
+    }
 
 }

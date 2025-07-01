@@ -11,7 +11,9 @@ enum class UserRole(
     ;
 
     companion object {
-        fun fromRole(role: String?): UserRole {
+        fun fromRole(
+            role: String?
+        ): UserRole {
             return entries.find { it.role == role }
                 ?: throw InvalidRoleException("Unknown user role: $role")
         }

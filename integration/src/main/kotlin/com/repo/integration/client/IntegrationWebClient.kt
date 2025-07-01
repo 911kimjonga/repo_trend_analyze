@@ -69,17 +69,22 @@ class IntegrationWebClient(
             }
     }
 
-    private fun setUrl(request: IntegrationRequestData): String =
-        UriComponentsBuilder.fromHttpUrl(request.url)
+    private fun setUrl(
+        request: IntegrationRequestData
+    ): String {
+        return UriComponentsBuilder.fromHttpUrl(request.url)
             .path(request.path)
             .toUriString()
             .let { baseUrl ->
                 request.body?.takeIf { request.method == HttpMethod.GET }
                     ?.let { toUriWithQueryParam(baseUrl, it) } ?: baseUrl
             }
+    }
 
-    private fun setHeaders(request: IntegrationRequestData) =
-        HttpHeaders().apply {
+    private fun setHeaders(
+        request: IntegrationRequestData
+    ): HttpHeaders {
+        return HttpHeaders().apply {
             this.contentType = request.contentType
             this.accept = listOf(request.accept)
 
@@ -90,13 +95,17 @@ class IntegrationWebClient(
 
             addAll(multiValueHeaders)
         }
+    }
 
-    private fun setBody(request: IntegrationRequestData): Any? =
-        when {
+    private fun setBody(
+        request: IntegrationRequestData
+    ): Any? {
+        return when {
             request.method == HttpMethod.GET -> null
             request.contentType == MediaType.APPLICATION_FORM_URLENCODED -> toFormUrlEncoded(request.body)
             else -> request.body
         }
+    }
 
     private fun <T : Any> toUriWithQueryParam(
         baseUrl: String,
@@ -115,10 +124,13 @@ class IntegrationWebClient(
         return uriBuilder.toUriString()
     }
 
-    private fun toFormUrlEncoded(requestBody: Any?): MultiValueMap<String, String>? {
+    private fun toFormUrlEncoded(
+        requestBody: Any?
+    ): MultiValueMap<String, String>? {
         if (requestBody == null) return null
 
         val map = LinkedMultiValueMap<String, String>()
+
         requestBody::class.memberProperties.forEach { property ->
             val value = property.getter.call(requestBody)?.toString()
             if (value != null) {
@@ -126,6 +138,7 @@ class IntegrationWebClient(
                 map.add(key, value)
             }
         }
+
         return map
     }
 }

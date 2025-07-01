@@ -26,15 +26,15 @@ class AuthController(
         @RequestBody vo: SignUpRequestVo
     ): ApiResponse<SignUpResponseVo> {
         val save = authService.signUp(
-            SignUpRequestDto(
-                vo.username,
-                vo.password,
-                vo.email
+            dto = SignUpRequestDto(
+                username = vo.username,
+                enteredPassword = vo.password,
+                email = vo.email
             )
         )
 
         return ApiResponse.ok(
-            SignUpResponseVo(
+            data = SignUpResponseVo(
                 isSuccess = save
             )
         )
@@ -57,16 +57,18 @@ class AuthController(
         @RequestBody vo: LoginRequestVo
     ): ApiResponse<TokenResponseVo> {
         val token = authService.login(
-            LoginRequestDto(
-                vo.username,
-                vo.password
+            dto = LoginRequestDto(
+                username = vo.username,
+                password = vo.password
             )
         )
 
-        response.addCookieRefreshToken(token.refreshToken)
+        response.addCookieRefreshToken(
+            refreshToken = token.refreshToken
+        )
 
         return ApiResponse.ok(
-            TokenResponseVo(
+            data = TokenResponseVo(
                 accessToken = token.accessToken,
             )
         )
@@ -88,12 +90,16 @@ class AuthController(
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): ApiResponse<TokenResponseVo> {
-        val newToken = authService.refresh(request.getRefreshToken())
+        val newToken = authService.refresh(
+            refreshToken = request.getRefreshToken()
+        )
 
-        response.addCookieRefreshToken(newToken.refreshToken)
+        response.addCookieRefreshToken(
+            refreshToken = newToken.refreshToken
+        )
 
         return ApiResponse.ok(
-            TokenResponseVo(
+            data = TokenResponseVo(
                 accessToken = newToken.accessToken,
             )
         )

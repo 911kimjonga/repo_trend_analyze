@@ -25,7 +25,9 @@ class UserRepository {
         }
 
     fun update(requestDto: UpdateRequestDto): Int =
-        Users.update({ Users.id eq requestDto.userId.toLong() }) {
+        Users.update(
+            where = { Users.id eq requestDto.userId.toLong() }
+        ) {
             it[status] = requestDto.status.status
         }
 
@@ -36,12 +38,12 @@ class UserRepository {
         }.singleOrNull() ?: throw UnauthenticatedException()
 
         return UserResponseDto(
-            entity.id.toString(),
-            entity.username,
-            entity.password,
-            entity.email,
-            entity.userRole,
-            entity.status
+            id = entity.id.toString(),
+            username = entity.username,
+            encryptedPassword = entity.password,
+            email = entity.email,
+            userRole = entity.userRole,
+            status = entity.status
         )
     }
 
@@ -57,12 +59,12 @@ class UserRepository {
         }.singleOrNull() ?: throw UnauthenticatedException()
 
         return UserResponseDto(
-            entity.id.toString(),
-            entity.username,
-            entity.password,
-            entity.email,
-            entity.userRole,
-            entity.status
+            id = entity.id.toString(),
+            username = entity.username,
+            encryptedPassword = entity.password,
+            email = entity.email,
+            userRole = entity.userRole,
+            status = entity.status
         )
     }
 

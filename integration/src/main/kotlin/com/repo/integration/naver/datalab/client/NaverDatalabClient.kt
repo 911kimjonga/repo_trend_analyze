@@ -28,16 +28,19 @@ class NaverDatalabClient(
         )
 
         val requestData = IntegrationRequestData(
-            config.url,
-            config.datalab.path,
-            HttpMethod.valueOf(config.datalab.method),
-            MediaType.valueOf(config.datalab.contentType),
-            MediaType.valueOf(config.datalab.accept),
-            clientHeader,
-            data
+            url = config.url,
+            path = config.datalab.path,
+            method = HttpMethod.valueOf(config.datalab.method),
+            contentType = MediaType.valueOf(config.datalab.contentType),
+            accept = MediaType.valueOf(config.datalab.accept),
+            customHeaders = clientHeader,
+            body = data
         )
 
-        val response = webClient.execute(requestData, NaverDatalabResponseData::class)
+        val response = webClient.execute(
+            request = requestData,
+            responseType = NaverDatalabResponseData::class
+        )
 
         return response.toCommand()
     }

@@ -68,7 +68,9 @@ class AuthFilter(
         }
     }
 
-    private fun resolveRequiredRole(request: HttpServletRequest): UserRole {
+    private fun resolveRequiredRole(
+        request: HttpServletRequest
+    ): UserRole {
         val uri = request.requestURI
         val method = request.method
 

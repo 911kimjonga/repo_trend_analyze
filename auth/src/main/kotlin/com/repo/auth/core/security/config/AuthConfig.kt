@@ -18,12 +18,15 @@ class AuthConfig(
 ) {
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
+    fun passwordEncoder(
+    ): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
 
     @Bean
-    fun authFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun authFilterChain(
+        http: HttpSecurity
+    ): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

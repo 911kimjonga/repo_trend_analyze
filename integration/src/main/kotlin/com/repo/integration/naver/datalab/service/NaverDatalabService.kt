@@ -9,7 +9,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
