@@ -1,4 +1,4 @@
-package com.skp.ocb.kotlin.serialize.serializer
+package com.repo.common.serializer
 
 
 import java.time.LocalDate

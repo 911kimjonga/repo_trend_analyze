@@ -12,6 +12,9 @@ server:
 spring:
 
   config:
+    activate:
+      on-profile: auth
+
     import:
       # DB 연결 정보
       - datasource-config.yml

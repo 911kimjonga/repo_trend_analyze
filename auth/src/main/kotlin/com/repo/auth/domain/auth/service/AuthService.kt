@@ -22,43 +22,63 @@ class AuthService(
 
     fun signUp(dto: SignUpRequestDto) =
         userService.saveUser(
-            SaveRequestDto(
-                dto.username,
-                passwordEncoder.encode(dto.enteredPassword),
-                dto.email
+            dto = SaveRequestDto(
+                username = dto.username,
+                encryptedPassword = passwordEncoder.encode(dto.enteredPassword),
+                email = dto.email
             )
         )
 
     fun withdraw(userId: String) =
         userService.updateUser(
-            UpdateRequestDto(
-                userId,
-                UserStatus.DEACTIVE
+            dto = UpdateRequestDto(
+                userId = userId,
+                status = UserStatus.DEACTIVE
             )
         )
 
     fun login(dto: LoginRequestDto): TokenResponseDto {
-        val user = userService.findUser(dto.username)
-        passwordEncoder.matches(dto.password, user.encryptedPassword)
+        val user = userService.findUser(
+            userName = dto.username
+        )
+
+        passwordEncoder.matches(
+            dto.password,
+            user.encryptedPassword
+        )
 
         return TokenResponseDto(
-            tokenService.generateAccessToken(user.id, UserRole.fromRole(user.userRole)),
-            tokenService.generateRefreshToken(user.id)
+            accessToken = tokenService.generateAccessToken(
+                userId = user.id,
+                userRole = UserRole.fromRole(user.userRole)
+            ),
+            refreshToken = tokenService.generateRefreshToken(user.id)
         )
     }
 
     fun logout(request: HttpServletRequest) {
-        val accessToken: String = tokenService.getAccessToken(request)
-        val refreshToken: String = tokenService.getRefreshToken(request)
+        val accessToken: String = tokenService.getAccessToken(
+            request = request
+        )
 
-        val userId = tokenService.deleteRefreshToken(refreshToken)
-        tokenService.addAccessTokenToBlacklist(userId, accessToken)
+        val refreshToken: String = tokenService.getRefreshToken(
+            request = request
+        )
+
+        val userId = tokenService.deleteRefreshToken(
+            refreshToken = refreshToken
+        )
+
+        tokenService.addAccessTokenToBlacklist(
+            userId = userId,
+            accessToken = accessToken
+        )
     }
 
     fun refresh(refreshToken: String) =
         TokenResponseDto(
-            tokenService.reissueAccessToken(refreshToken),
-            tokenService.rotateRefreshToken(refreshToken)
+            accessToken = tokenService.reissueAccessToken(refreshToken),
+            refreshToken = tokenService.rotateRefreshToken(refreshToken)
         )
 
 }

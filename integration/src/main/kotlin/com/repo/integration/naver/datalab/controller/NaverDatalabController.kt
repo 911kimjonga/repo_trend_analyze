@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/naver-datalab")
 class NaverDatalabController(
-    private val service: NaverDatalabService
+    private val service: NaverDatalabService,
 ) {
 
     @GetMapping("/test")
-    fun test(): ResponseEntity<String> {
-        return ResponseEntity.ok(service.search())
+    suspend fun test(): ResponseEntity<String> {
+
+        return ResponseEntity.ok(service.test())
     }
 
 }

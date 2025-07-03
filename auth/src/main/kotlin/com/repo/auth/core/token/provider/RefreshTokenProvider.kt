@@ -46,7 +46,8 @@ class RefreshTokenProvider(
 
     fun getUserId(
         token: String
-    ): String =
-        redisService.get(REFRESH, token)
+    ): String {
+        return redisService.get(REFRESH, token)
+    }
 
 }

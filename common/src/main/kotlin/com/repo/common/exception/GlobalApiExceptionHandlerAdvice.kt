@@ -15,8 +15,8 @@ class GlobalApiExceptionHandlerAdvice {
         ex: Exception
     ): ApiResponse<Unit> {
         return ApiResponse.error(
-            HttpStatus.INTERNAL_SERVER_ERROR.value().toString(),
-            ex.message.orEmpty()
+            code = HttpStatus.INTERNAL_SERVER_ERROR.value().toString(),
+            message = ex.message.orEmpty()
         )
     }
 

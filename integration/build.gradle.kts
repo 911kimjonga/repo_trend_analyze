@@ -34,7 +34,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
 
     // spring web
-    implementation("org.springframework.boot:spring-boot-starter-web")
+//    implementation("org.springframework.boot:spring-boot-starter-web")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")

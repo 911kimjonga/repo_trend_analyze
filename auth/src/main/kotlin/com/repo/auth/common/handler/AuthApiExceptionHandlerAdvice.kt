@@ -11,10 +11,12 @@ class AuthApiExceptionHandlerAdvice {
     @ExceptionHandler(
         AuthException::class
     )
-    fun handleAuthException(ex: AuthException): ApiResponse<Unit> =
+    fun handleAuthException(
+        ex: AuthException
+    ): ApiResponse<Unit> =
         ApiResponse.error(
-            ex.status.value().toString(),
-            ex.message
+            code = ex.status.value().toString(),
+            message = ex.message
         )
 
 }

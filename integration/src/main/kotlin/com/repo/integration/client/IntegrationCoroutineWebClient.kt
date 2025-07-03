@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import org.springframework.web.reactive.function.client.awaitBody
 import org.springframework.web.util.UriComponentsBuilder
 import reactor.core.publisher.Mono
 import java.net.ConnectException
@@ -25,48 +27,43 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
 @Component
-class IntegrationWebClient(
+class IntegrationCoroutineWebClient(
     private val json: Json,
 ) {
     private val webClient: WebClient = WebClientFactory.getDefaultClient()
 
     @OptIn(InternalSerializationApi::class)
-    fun <T : Any> execute(
+    suspend fun <T : Any> execute(
         request: IntegrationRequestData,
         responseType: KClass<T>
-    ): Mono<T> {
+    ): T {
         val url = this.setUrl(request)
         val method = request.method
         val headers = this.setHeaders(request)
         val requestBody = this.setBody(request)
 
-        return webClient.method(method)
-            .uri(url)
-            .headers { it.setAll(headers.toSingleValueMap()) }
-            .apply { requestBody?.let { this.bodyValue(it) } }
-            .retrieve()
-            .onStatus({ it.isError }) {
-                it.bodyToMono(String::class.java)
-                    .map { _ ->
-                        when {
-                            it.statusCode().is4xxClientError -> IntegrationClientException()
-                            it.statusCode().is5xxServerError -> IntegrationServerException()
-                            else -> IntegrationUnexpectedException()
-                        }
-                    }
-            }
-            .bodyToMono(String::class.java)
-            .map { json.decodeFromString(responseType.serializer(), it) }
-            .doOnSubscribe { logInfo("Calling API: $url") }
-            .doOnSuccess { logInfo("API Success") }
-            .doOnError { logError("API Error", it) }
-            .onErrorMap { throwable ->
-                when (throwable) {
-                    is SocketTimeoutException -> IntegrationTimeoutException("Timeout", throwable)
-                    is ConnectException -> IntegrationConnectionException("Connection error", throwable)
-                    else -> IntegrationUnexpectedException("Unexpected error", throwable)
+        try {
+            val response = webClient.method(method)
+                .uri(url)
+                .headers { it.setAll(headers.toSingleValueMap()) }
+                .apply { requestBody?.let { this.bodyValue(it) } }
+                .retrieve()
+                .awaitBody<String>()
+
+            return json.decodeFromString(responseType.serializer(), response)
+        } catch (ex: Exception) {
+            throw when (ex) {
+                is WebClientResponseException -> when {
+                    ex.statusCode.is4xxClientError -> IntegrationClientException()
+                    ex.statusCode.is5xxServerError -> IntegrationServerException()
+                    else -> IntegrationUnexpectedException()
                 }
+
+                is SocketTimeoutException -> IntegrationTimeoutException("Timeout", ex)
+                is ConnectException -> IntegrationConnectionException("Connection error", ex)
+                else -> IntegrationUnexpectedException("Unexpected error", ex)
             }
+        }
     }
 
     private fun setUrl(

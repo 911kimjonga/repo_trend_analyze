@@ -1,0 +1,5 @@
+integration:
+  naver:
+    client:
+      id: ${NAVER_CLIENT_ID}
+      secret: ${NAVER_CLIENT_SECRET}

@@ -1,10 +1,13 @@
-package com.repo.integration.naver.datalab.model
+package com.repo.integration.naver.datalab.model.command
 
 import com.repo.integration.naver.datalab.enums.TimeUnit
+import com.repo.integration.naver.datalab.model.data.NaverDatalabRequestData
+import com.repo.integration.naver.datalab.model.data.NaverDatalabResponseData
+import com.repo.integration.naver.datalab.model.extensions.toCommand
 import kotlinx.serialization.Serializable
 
 @Serializable
-class NaverDatalabResponseData(
+data class NaverDatalabResponseCommand(
     val startDate: String,
     val endDate: String,
     val timeUnit: TimeUnit,

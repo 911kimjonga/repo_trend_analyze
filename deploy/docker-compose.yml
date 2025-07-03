@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  app:
+    restart: always
+    image: 911kimjonga/repo-trend-analyze:latest
+    container_name: "app"
+    environment:
+      - TZ=Asia/Seoul
+      - spring.data.redis.host=redis   # 스프링에서 Redis 접근 시 컨테이너 이름 사용, 0311
+    env_file: ./.env
+    ports:
+      - "80:8082"
+    networks:
+      - repo-trend-analyze
+
+  #  fcm:
+  #    restart: always
+  #    image: polycube0/unse-fcm:latest
+  #    container_name: "fcm"
+  #    env_file: ./.env
+  #    ports:
+  #      - "8083:8083"
+  #    networks:
+  #      - repo-trend-analyze
+
+  # not always for now
+  redis:
+    image: redis:latest
+    container_name: "redis"
+    env_file: ./.env
+    ports:
+      - "6379:6379"
+    networks:
+      - repo-trend-analyze
+
+networks:
+  repo-trend-analyze:
