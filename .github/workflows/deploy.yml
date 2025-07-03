@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_CONTENTS }}" > .env
           ls -al .env
-          cat .env  # 👈 생성 확인용 로그
+          cat .env
 
       # docker-compose.yml, 스크립트, .env 복사
       - name: Copy files to EC2
