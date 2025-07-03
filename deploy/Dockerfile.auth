@@ -1,0 +1,8 @@
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+# 멀티모듈 빌드 결과 JAR 복사
+COPY auth/build/libs/auth-0.0.1-SNAPSHOT.jar app.jar
+
+# auth 프로필 활성화
+ENTRYPOINT ["java", "-Dspring.profiles.active=auth", "-jar", "app.jar"]
