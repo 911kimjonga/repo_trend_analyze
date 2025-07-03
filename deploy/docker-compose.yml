@@ -4,7 +4,7 @@ services:
 
   app:
     restart: always
-    image: polycube0/unse:latest
+    image: 911kimjonga/repo-trend-analyze:latest
     container_name: "app"
     environment:
       - TZ=Asia/Seoul
@@ -13,7 +13,7 @@ services:
     ports:
       - "80:8082"
     networks:
-      - unse
+      - repo-trend-analyze
 
   #  fcm:
   #    restart: always
@@ -23,7 +23,7 @@ services:
   #    ports:
   #      - "8083:8083"
   #    networks:
-  #      - unse
+  #      - repo-trend-analyze
 
   # not always for now
   redis:
@@ -33,7 +33,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - unse
+      - repo-trend-analyze
 
 networks:
-  unse:
+  repo-trend-analyze:
