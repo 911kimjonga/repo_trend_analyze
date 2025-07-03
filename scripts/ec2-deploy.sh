@@ -1,30 +1,48 @@
 #!/bin/bash
 set -e
 
-# docker-compose가 설치되어 있는지 확인하고 없으면 설치
+# [0] Docker 설치 확인 및 설치
+if ! command -v docker &> /dev/null; then
+  echo "[INFO] Docker not found. Installing..."
+  sudo yum update -y
+  sudo yum install -y docker
+  sudo systemctl start docker
+  sudo systemctl enable docker
+  sudo usermod -aG docker ec2-user
+  echo "[INFO] Docker installed."
+fi
+
+# [1] docker-compose 설치 확인 및 설치
 if ! command -v docker-compose &> /dev/null; then
   echo "[INFO] docker-compose not found. Installing..."
-  sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  DOCKER_COMPOSE_VERSION="v2.24.6"
+  sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" \
+    -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
+  echo "[INFO] docker-compose installed."
 fi
 
 CONFIG_PATH="/home/ec2-user/docker-compose.yml"
 INIT_FILE="/home/ec2-user/.nada"
 
-# 1. 최신 이미지 Pull
+# [2] 최신 이미지 Pull
+echo "[INFO] Pulling latest images..."
 sudo docker-compose -f "$CONFIG_PATH" pull
 
-# 2. 최초 배포 시 Redis만 먼저 기동
+# [3] 최초 배포 시 Redis만 먼저 기동
 if [ ! -f "$INIT_FILE" ]; then
-  echo "[Init] Starting redis..."
+  echo "[INFO] First time deploy: Starting redis..."
   sudo docker-compose -f "$CONFIG_PATH" up -d redis
   touch "$INIT_FILE"
 fi
 
-# 3. 모듈별 컨테이너 기동/재기동
+# [4] 모듈별 컨테이너 기동/재기동
+echo "[INFO] Starting auth and integration services..."
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps auth
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps integration
 
-# 4. 사용하지 않는 이미지 정리
+# [5] 사용하지 않는 이미지 정리
+echo "[INFO] Pruning unused docker images..."
 sudo docker image prune -af
-echo "[Deploy] Done."
+
+echo "[✅ Deploy] Done."
