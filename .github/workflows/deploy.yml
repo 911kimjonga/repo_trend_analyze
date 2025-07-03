@@ -55,7 +55,10 @@ jobs:
 
       # .env 파일을 시크릿으로부터 생성
       - name: Write .env from secret
-        run: echo "${{ secrets.ENV_FILE_CONTENTS }}" > .env
+        run: |
+          echo "${{ secrets.ENV_FILE_CONTENTS }}" > .env
+          ls -al .env
+          cat .env  # 👈 생성 확인용 로그
 
       # docker-compose.yml, 스크립트, .env 복사
       - name: Copy files to EC2
@@ -65,7 +68,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_KEY }}
           strip_components: '1'
-          source: "deploy/docker-compose.yml,scripts/ec2-deploy.sh,.env"
+          source: "./.env,deploy/docker-compose.yml,scripts/ec2-deploy.sh"
           target: "/home/ec2-user/"
 
       # 원격 배포 실행
