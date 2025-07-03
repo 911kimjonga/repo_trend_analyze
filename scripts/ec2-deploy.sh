@@ -25,23 +25,27 @@ fi
 CONFIG_PATH="/home/ec2-user/docker-compose.yml"
 INIT_FILE="/home/ec2-user/.nada"
 
-# [2] 최신 이미지 Pull
+# [2] 기존 컨테이너 정리 (포트 변경 등 대응)
+echo "[INFO] Removing existing containers..."
+sudo docker-compose -f "$CONFIG_PATH" down
+
+# [3] 최신 이미지 Pull
 echo "[INFO] Pulling latest images..."
 sudo docker-compose -f "$CONFIG_PATH" pull
 
-# [3] 최초 배포 시 Redis만 먼저 기동
+# [4] 최초 배포 시 Redis만 먼저 기동
 if [ ! -f "$INIT_FILE" ]; then
   echo "[INFO] First time deploy: Starting redis..."
   sudo docker-compose -f "$CONFIG_PATH" up -d redis
   touch "$INIT_FILE"
 fi
 
-# [4] 모듈별 컨테이너 기동/재기동
+# [5] 모듈별 컨테이너 기동/재기동
 echo "[INFO] Starting auth and integration services..."
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps auth
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps integration
 
-# [5] 사용하지 않는 이미지 정리
+# [6] 사용하지 않는 이미지 정리
 echo "[INFO] Pruning unused docker images..."
 sudo docker image prune -af
 
