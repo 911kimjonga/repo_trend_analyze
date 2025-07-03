@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# docker-compose가 설치되어 있는지 확인하고 없으면 설치
+if ! command -v docker-compose &> /dev/null; then
+  echo "[INFO] docker-compose not found. Installing..."
+  sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+fi
+
 CONFIG_PATH="/home/ec2-user/docker-compose.yml"
 INIT_FILE="/home/ec2-user/.nada"
 
