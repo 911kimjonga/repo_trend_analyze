@@ -1,23 +1,23 @@
 #!/bin/bash
+set -e
 
 CONFIG_PATH="/home/ec2-user/docker-compose.yml"
 INIT_FILE="/home/ec2-user/.nada"
 
-# 도커 이미지 업데이트
-sudo docker-compose -f $CONFIG_PATH pull
+# 1. 최신 이미지 Pull
+sudo docker-compose -f "$CONFIG_PATH" pull
 
-# 초기 실행 로직 (한 번만 실행)
-if [ ! -f $INIT_FILE ]; then
-    echo "First time running...."
-    sudo docker-compose -f $CONFIG_PATH up -d redis
-    touch $INIT_FILE
+# 2. 최초 배포 시 Redis만 먼저 기동
+if [ ! -f "$INIT_FILE" ]; then
+  echo "[Init] Starting redis..."
+  sudo docker-compose -f "$CONFIG_PATH" up -d redis
+  touch "$INIT_FILE"
 fi
 
-# app 컨테이너 실행 (환경 변수와 볼륨 마운트 적용)
-sudo docker-compose -f $CONFIG_PATH up -d --no-deps app
+# 3. 모듈별 컨테이너 기동/재기동
+sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps auth
+sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps integration
 
-# fcm 컨테이너 실행 (추가 설정 없이 실행)
-#sudo docker-compose -f $CONFIG_PATH up -d --no-deps fcm
-
-# 사용하지 않는 이미지 제거
+# 4. 사용하지 않는 이미지 정리
 sudo docker image prune -af
+echo "[Deploy] Done."

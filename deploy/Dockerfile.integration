@@ -1,0 +1,6 @@
+# -------- integration 서비스 --------
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+COPY integration/build/libs/integration-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=integration", "-jar", "app.jar"]
