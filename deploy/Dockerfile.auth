@@ -5,4 +5,4 @@ WORKDIR /app
 COPY auth/build/libs/auth-0.0.1-SNAPSHOT.jar app.jar
 
 # auth 프로필 활성화
-ENTRYPOINT ["java", "-Dspring.profiles.active=auth", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=auth,prod", "-jar", "app.jar"]

@@ -16,9 +16,9 @@ set -a
 set +a
 
 # Gradle 실행
-./gradlew :auth:bootRun --args='--spring.profiles.active=auth' &
+./gradlew :auth:bootRun --args='--spring.profiles.active=auth,local' &
 PID1=$!
-./gradlew :integration:bootRun --args='--spring.profiles.active=integration' &
+./gradlew :integration:bootRun --args='--spring.profiles.active=integration,local' &
 PID2=$!
 
 wait $PID1
