@@ -29,20 +29,38 @@ INIT_FILE="/home/ec2-user/.nada"
 echo "[INFO] Pulling latest images..."
 sudo docker-compose -f "$CONFIG_PATH" pull auth
 sudo docker-compose -f "$CONFIG_PATH" pull integration
+sudo docker-compose -f "$CONFIG_PATH" pull messaging
+sudo docker-compose -f "$CONFIG_PATH" pull kafka
+sudo docker-compose -f "$CONFIG_PATH" pull zookeeper
 
-# [3] 최초 배포 시 Redis만 먼저 기동
+# [3] Kafka 및 Zookeeper 기동 상태 확인 및 기동
+KAFKA_RUNNING=$(docker ps --filter "name=kafka" --filter "status=running" -q)
+ZOOKEEPER_RUNNING=$(docker ps --filter "name=zookeeper" --filter "status=running" -q)
+
+if [ -z "$ZOOKEEPER_RUNNING" ]; then
+  echo "[INFO] Starting zookeeper..."
+  sudo docker-compose -f "$CONFIG_PATH" up -d zookeeper
+fi
+
+if [ -z "$KAFKA_RUNNING" ]; then
+  echo "[INFO] Starting kafka..."
+  sudo docker-compose -f "$CONFIG_PATH" up -d kafka
+fi
+
+# [4] 최초 배포 시 Redis만 먼저 기동
 if [ ! -f "$INIT_FILE" ]; then
   echo "[INFO] First time deploy: Starting redis..."
-  sudo docker-compose -f "$CONFIG_PATH" up -d redis
+  sudo docker-compose -f "$CONFIG_PATH" up -d redis-auth redis-service
   touch "$INIT_FILE"
 fi
 
-# [4] 모듈별 컨테이너 기동/재기동
+# [5] 모듈별 컨테이너 기동/재기동
 echo "[INFO] Starting auth and integration services..."
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps auth
 sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps integration
+sudo docker-compose -f "$CONFIG_PATH" up -d --no-deps messaging
 
-# [5] 사용하지 않는 이미지 정리
+# [6] 사용하지 않는 이미지 정리
 echo "[INFO] Pruning unused docker images..."
 sudo docker image prune -af
 

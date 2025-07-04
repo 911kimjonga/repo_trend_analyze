@@ -9,12 +9,9 @@ server:
 spring:
   config:
     activate:
-      on-profile: integration
+      on-profile: messaging
 
     import:
-      - external-integration-config.yml
-      - naver-client-config.yml
-      - redis-config.yml
       - kafka-config.yml
 
 logging:

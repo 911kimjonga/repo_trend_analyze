@@ -16,26 +16,28 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
+
+    sourceSets.all {
+        languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
+    }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    enabled = false
-}
-
-tasks.getByName<Jar>("jar") {
-    enabled = true
-}
-
 dependencies {
+    // common module
+    implementation(project(":common"))
+
+    // spring boot starter
+    implementation("org.springframework.boot:spring-boot-starter")
+
     // spring web
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // logging
-    implementation("org.springframework.boot:spring-boot-starter-logging")
+    // kafka
+    implementation("org.springframework.kafka:spring-kafka")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -43,5 +45,11 @@ dependencies {
 
     // kotlin serializable
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
-    implementation("org.reflections:reflections:0.10.2")
+
+    // tester
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

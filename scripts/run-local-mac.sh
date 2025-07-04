@@ -6,8 +6,8 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PROJECT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 cd "$PROJECT_ROOT"
 
-# Java 경로
-export JAVA_HOME="/c/Users/JWKim/.jdks/corretto-21.0.6"
+# Java 경로 (Mac에서 설치된 Corretto 사용)
+export JAVA_HOME="/Users/gimjong-won/Library/Java/JavaVirtualMachines/corretto-21.0.6/Contents/Home"
 export PATH="$JAVA_HOME/bin:$PATH"
 
 # .env 로드
@@ -20,6 +20,9 @@ set +a
 PID1=$!
 ./gradlew :integration:bootRun --args='--spring.profiles.active=integration,local' &
 PID2=$!
+./gradlew :messaging:bootRun --args='--spring.profiles.active=messaging,local' &
+PID3=$!
 
 wait $PID1
 wait $PID2
+wait $PID3

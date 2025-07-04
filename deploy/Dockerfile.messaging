@@ -1,0 +1,6 @@
+# -------- messaging 서비스 --------
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+COPY messaging/build/libs/messaging-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=messaging,prod", "-jar", "app.jar"]
