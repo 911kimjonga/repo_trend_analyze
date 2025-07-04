@@ -26,8 +26,9 @@ CONFIG_PATH="/home/ec2-user/docker-compose.yml"
 INIT_FILE="/home/ec2-user/.nada"
 
 # [2] 기존 컨테이너 정리 (포트 변경 등 대응)
-echo "[INFO] Removing existing containers..."
-sudo docker-compose -f "$CONFIG_PATH" down
+echo "[INFO] Removing existing auth and integration containers..."
+sudo docker-compose -f "$CONFIG_PATH" rm -fs auth
+sudo docker-compose -f "$CONFIG_PATH" rm -fs integration
 
 # [3] 최신 이미지 Pull
 echo "[INFO] Pulling latest images..."
