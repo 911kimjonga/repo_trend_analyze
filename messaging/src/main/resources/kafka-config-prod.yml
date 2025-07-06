@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: example-consumer-group
       auto-offset-reset: earliest
@@ -10,4 +10,4 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     listener:
-      ack-mode: manual # 또는 record, batch, manual_immediate 등 필요에 따라
+      ack-mode: manual

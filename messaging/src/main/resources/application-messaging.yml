@@ -11,9 +11,6 @@ spring:
     activate:
       on-profile: messaging
 
-    import:
-      - kafka-config.yml
-
 logging:
   level:
     org.springframework.boot.context.properties: DEBUG
