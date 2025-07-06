@@ -1,9 +1,9 @@
 server:
-  port: 8100
+  port: 8090
 
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: integration,local
     import:
       - kafka-config-local.yml

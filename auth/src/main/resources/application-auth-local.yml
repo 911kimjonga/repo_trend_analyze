@@ -4,6 +4,6 @@ server:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: auth,local
     import:
       - kafka-config-local.yml
