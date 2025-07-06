@@ -4,6 +4,7 @@ server:
 spring:
   config:
     activate:
-      on-profile: messaging,prod
+      on-profile:
+        - prod
     import:
       - kafka-config-prod.yml
