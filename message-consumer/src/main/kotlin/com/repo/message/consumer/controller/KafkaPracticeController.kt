@@ -1,7 +1,7 @@
-package com.repo.messaging.controller
+package com.repo.message.consumer.controller
 
-import com.repo.messaging.consumer.KafkaPracticeConsumer
-import com.repo.messaging.producer.KafkaPracticeProducer
+import com.repo.message.consumer.consumer.KafkaPracticeConsumer
+import com.repo.message.consumer.producer.KafkaPracticeProducer
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

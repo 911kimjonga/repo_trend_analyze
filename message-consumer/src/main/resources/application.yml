@@ -9,7 +9,7 @@ server:
 spring:
   config:
     activate:
-      on-profile: messaging
+      on-profile: message-consumer
 
     import:
       - kafka-config.yml

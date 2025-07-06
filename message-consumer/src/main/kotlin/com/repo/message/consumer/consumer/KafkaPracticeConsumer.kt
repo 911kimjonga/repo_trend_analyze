@@ -1,4 +1,4 @@
-package com.repo.messaging.consumer
+package com.repo.message.consumer.consumer
 
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
