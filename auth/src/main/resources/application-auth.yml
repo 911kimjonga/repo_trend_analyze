@@ -21,8 +21,6 @@ spring:
       - jwt-config.yml
       # Redis 정보
       - redis-config.yml
-      # Kafka 정보
-      - kafka-config.yml
 
   # 기타
   autoconfigure:

@@ -15,7 +15,6 @@ spring:
       - external-integration-config.yml
       - naver-client-config.yml
       - redis-config.yml
-      - kafka-config.yml
 
 logging:
   level:
