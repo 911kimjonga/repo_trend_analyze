@@ -16,13 +16,13 @@ class KafkaPracticeController(
     private val consumer: KafkaPracticeConsumer
 ) {
 
-    @PostMapping
+    @PostMapping("send")
     fun sendMessage(@RequestParam message: String): ResponseEntity<String> {
         producer.send(message)
         return ResponseEntity.ok("Message sent: $message")
     }
 
-    @GetMapping
+    @GetMapping("receive")
     fun getMessages(): ResponseEntity<List<String>> {
         return ResponseEntity.ok(consumer.getMessages())
     }
