@@ -1,0 +1,26 @@
+# 서버
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    # H2 로컬 파일 DB (MySQL 호환 모드)
+    url: jdbc:h2:file:../h2db/testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  # H2 데이터베이스
+  h2:
+    console:
+      enabled: true
+      # H2 콘솔 패스
+      path: /h2-console
