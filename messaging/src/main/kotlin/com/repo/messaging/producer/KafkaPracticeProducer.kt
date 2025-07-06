@@ -1,4 +1,4 @@
-package com.repo.message.consumer.producer
+package com.repo.messaging.producer
 
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
